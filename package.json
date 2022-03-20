@@ -1,5 +1,5 @@
 {
-  "name": "gorgon",
+  "name": "@mikevalstar/gorgon",
   "version": "1.0.0",
   "description": "A simple caching library for async functons",
   "main": "index.js",
@@ -13,7 +13,8 @@
   },
   "keywords": [
     "cache",
-    "promise"
+    "promise",
+    "async"
   ],
   "author": "Mike Valstar <mikevalstar@gmail.com>",
   "license": "MIT",
