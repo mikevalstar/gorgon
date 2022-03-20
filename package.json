@@ -1,14 +1,25 @@
 {
   "name": "gorgon",
   "version": "1.0.0",
-  "description": "A simple caching library",
+  "description": "A simple caching library for async functons",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "build": "vite build"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mikevalstar/gorgon.git"
+  },
+  "keywords": [
+    "cache",
+    "promise"
+  ],
+  "author": "Mike Valstar <mikevalstar@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikevalstar/gorgon/issues"
+  },
   "devDependencies": {
     "eslint": "^8.11.0",
     "jest": "^27.5.1"
