@@ -1,0 +1,20 @@
+{
+  "name": "gorgon",
+  "version": "1.0.0",
+  "description": "A simple caching library",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "vite build"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "jest": "^27.5.1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "timers": "fake"
+  }
+}
