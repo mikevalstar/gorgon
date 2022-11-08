@@ -12,7 +12,7 @@ describe('concurrency', () => {
     let calledCount = 0;
 
     const incrementor = async() => {
-      return new Promise(resolve => {
+      return new Promise((resolve: (value: boolean) => void) => {
         setTimeout(()=> {
           calledCount += 1;
           resolve(true);

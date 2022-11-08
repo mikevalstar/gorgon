@@ -1,7 +1,6 @@
 import { IGorgonCacheProvider, GorgonPolicySanitized } from "../index";
 
 interface IGorgonMemoryCacheProvider extends IGorgonCacheProvider {
-  keys: () => Promise<string[]>;
   _clear: (key:string) => boolean;
 }
 

@@ -11,6 +11,10 @@ Medusa supports
 
     npm install @mikevalstar/gorgon
 
+    yarn add @mikevalstar/gorgon
+
+    pnpm add @mikevalstar/gorgon
+
 ## Usage
 
 ```javascript
@@ -35,6 +39,32 @@ ex().then(res => {
 ex().then(res => {
   console.log(res);
 });
+
+/* returns:
+cache miss
+example
+example
+example */
+```
+
+```typescript
+import Gorgon from '@mikevalstar/gorgon';
+
+const ex = async() => {
+  return Gorgon.get('sample', async() => {
+    console.log('cache miss');
+    return 'example';
+  }, 1000);
+}
+
+const res1 = await ex();
+console.log(res1);
+
+const res2 = await ex();
+console.log(res2);
+
+const res3 = await ex();
+console.log(res3);
 
 /* returns:
 cache miss
@@ -86,7 +116,6 @@ Send in an updated settings object:
 
 * debug: _will output logging_
 * retry: _will allow for the concurrency queue to be bypassed after this interval, default: 5000_
-* returnMutator: _a function to mutate the return value for output (good for using something like lodash.cloneDeep)_
 
 ## Policies
 

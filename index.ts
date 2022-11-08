@@ -9,7 +9,6 @@ export type GorgonSettings = {
 }
 export type GorgonSettingsInput = {
   debug?: boolean;
-  returnMutator?: ((input: any) => any) | null | undefined;
   defaultProvider?: string;
   retry?: number;
 }
@@ -25,8 +24,9 @@ export type GorgonPolicySanitized = {
 export interface IGorgonCacheProvider {
   init: () => Promise<void>;
   get: (key: string) => Promise<any>;
-  set: (key: string, value: any, policy: GorgonPolicySanitized) => Promise<any>;
+  set: <R>(key: string, value: R, policy: GorgonPolicySanitized) => Promise<R>;
   clear: (key?: string) => Promise<boolean>;
+  keys: () => Promise<string[]>;
 }
 
 const Gorgon = (() => {
@@ -76,7 +76,7 @@ const Gorgon = (() => {
   const gorgonCore = {
 
     // Providers available for use
-    providers: {},
+    providers: {} as {[key: string]: IGorgonCacheProvider},
 
     // Allows for settings on the gorgon cache
     settings: (newSettings?: GorgonSettingsInput) => {
@@ -96,11 +96,11 @@ const Gorgon = (() => {
     },
 
     // Place an item into the cache
-    put: async(key:string, value:any, policy?: GorgonPolicyInput) => {
+    put: async<R>(key:string, value:R, policy?: GorgonPolicyInput):Promise<R> => {
       policy = policyMaker(policy);
       var prov = gorgonCore.providers[policy.provider];
 
-      return prov.set(key, value, policy);
+      return prov.set(key, value, policyMaker(policy));
     },
 
         // Clear one or all items in the cache
@@ -149,12 +149,12 @@ const Gorgon = (() => {
     },
 
     // Allows you to get from the cache or pull from the promise
-    get: async(key:string, asyncFunc:asyncFunction, policy?: GorgonPolicyInput) => {
+    get: async<R>(key:string, asyncFunc:() => R, policy?: GorgonPolicyInput):Promise<R> => {
 
       policy = policyMaker(policy);
       const prov = gorgonCore.providers[policy.provider];
 
-      const currentVal = await prov.get(key, asyncFunc, policy); // Most providersw will only lookup by key and return false on not found
+      const currentVal = await prov.get(key); // Most providersw will only lookup by key and return false on not found
 
       // If we have a current value sent it out; cache hit!
       if(currentVal !== undefined) {
@@ -186,7 +186,7 @@ const Gorgon = (() => {
             });
           });
 
-          return concurent;
+          return concurent as Promise<R>; // may be a betetr way to infer this
         }
       }else{
         // Add current task to list, this is the first one so the primary
