@@ -1,4 +1,5 @@
-const Gorgon = require('../index.js');
+import { describe, it, expect } from 'vitest';
+import Gorgon from '../index';
 
 describe('Clear many from storage', () => {
 

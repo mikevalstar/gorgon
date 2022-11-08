@@ -1,4 +1,33 @@
-const MemoryCache = require('./provider/memory.js');
+import MemoryCache from './provider/memory';
+
+export type asyncFunction = () => Promise<any> | (() => any);
+export type GorgonSettings = {
+  debug: boolean;
+  returnMutator: ((input: any) => any) | null | undefined;
+  defaultProvider: string;
+  retry: number;
+}
+export type GorgonSettingsInput = {
+  debug?: boolean;
+  returnMutator?: ((input: any) => any) | null | undefined;
+  defaultProvider?: string;
+  retry?: number;
+}
+export type GorgonPolicy = {
+  expiry: number | Date | false;
+  provider: string;
+};
+export type GorgonPolicyInput = GorgonPolicy | number | Date;
+export type GorgonPolicySanitized = {
+  expiry: number | false;
+  provider: string;
+};
+export interface IGorgonCacheProvider {
+  init: () => Promise<void>;
+  get: (key: string) => Promise<any>;
+  set: (key: string, value: any, policy: GorgonPolicySanitized) => Promise<any>;
+  clear: (key?: string) => Promise<boolean>;
+}
 
 const Gorgon = (() => {
 
@@ -7,16 +36,16 @@ const Gorgon = (() => {
 
   const settings = {
     debug: false,
-    returnMutator: false,
+    returnMutator: null,
     defaultProvider: 'memory',
     retry: 5000,
-  };
+  } as GorgonSettings;
 
-  const policyMaker = function(incPolicy) {
+  const policyMaker = function(incPolicy?: GorgonPolicyInput) {
     const outPolicy = {
       expiry: false,
       provider: settings.defaultProvider,
-    };
+    } as GorgonPolicySanitized;
 
     // Blank policy, false, or no policy. lets store forever
     if (!incPolicy) {
@@ -24,22 +53,22 @@ const Gorgon = (() => {
     }
 
     // Type is a full policy object
-    if (typeof incPolicy === 'object' && incPolicy.expiry) {
-      outPolicy.expiry = incPolicy.expiry;
+    if(incPolicy instanceof Date){
+      var d = new Date();
+      outPolicy.expiry = Math.ceil((incPolicy.getTime() - d.getTime()) / 1000);
+    }else if (typeof incPolicy === 'object' && incPolicy.expiry) {
+      if(incPolicy.expiry instanceof Date){
+        outPolicy.expiry = Math.ceil((incPolicy.expiry.getTime() - d.getTime()) / 1000);
+      }else{
+        outPolicy.expiry = incPolicy.expiry;
+      }
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
-    } else {
+    } else if(typeof incPolicy === 'number'){
       outPolicy.expiry = incPolicy;
     }
 
-    // Date object parsing
-    if (outPolicy.expiry.getTime) {
-      var d = new Date();
-
-      outPolicy.expiry = Math.ceil((outPolicy.expiry.getTime() - d.getTime()) / 1000);
-    }
-
     // Number is too small, negative or not a number
-    outPolicy.expiry = parseInt(outPolicy.expiry) > 0 ? parseInt(outPolicy.expiry) : false;
+    outPolicy.expiry = outPolicy.expiry > 0 ? outPolicy.expiry : false;
 
     return outPolicy;
   };
@@ -50,7 +79,7 @@ const Gorgon = (() => {
     providers: {},
 
     // Allows for settings on the gorgon cache
-    settings: newSettings => {
+    settings: (newSettings?: GorgonSettingsInput) => {
       if (!newSettings) {
         return settings;
       }
@@ -61,13 +90,13 @@ const Gorgon = (() => {
     },
 
     // Add a provider
-    addProvider: (name, provider) => {
+    addProvider: (name: string, provider) => {
       provider.init(); // Trigger for provider to clear any old cache items or any other cleanup
       gorgonCore.providers[name] = provider;
     },
 
     // Place an item into the cache
-    put: async(key, value, policy) => {
+    put: async(key:string, value:any, policy?: GorgonPolicyInput) => {
       policy = policyMaker(policy);
       var prov = gorgonCore.providers[policy.provider];
 
@@ -75,7 +104,7 @@ const Gorgon = (() => {
     },
 
         // Clear one or all items in the cache
-    clear: async(key, provider) => {
+    clear: async(key: string, provider?: string) => {
 
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
 
@@ -100,7 +129,7 @@ const Gorgon = (() => {
     },
 
     // Allows you to instantly overwite a cache object
-    overwrite: async(key, asyncFunc, policy) => {
+    overwrite: async(key:string, asyncFunc: asyncFunction, policy?: GorgonPolicyInput) => {
 
       try{
         const resolvedData = await asyncFunc();
@@ -120,7 +149,7 @@ const Gorgon = (() => {
     },
 
     // Allows you to get from the cache or pull from the promise
-    get: async(key, asyncFunc, policy) => {
+    get: async(key:string, asyncFunc:asyncFunction, policy?: GorgonPolicyInput) => {
 
       policy = policyMaker(policy);
       const prov = gorgonCore.providers[policy.provider];
@@ -213,4 +242,4 @@ const Gorgon = (() => {
 
 })();
 
-module.exports = Gorgon;
+export default Gorgon;

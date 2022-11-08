@@ -1,9 +1,9 @@
-const {resolve} = require('path');
-const Gorgon = require('../index.js');
+import { describe, it, expect, vi } from 'vitest';
+import Gorgon from '../index';
 
 Gorgon.settings({retry: 10});
 
-jest.useRealTimers();
+vi.useRealTimers();
 
 describe('concurrency', () => {
 

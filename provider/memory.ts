@@ -1,3 +1,9 @@
+import { IGorgonCacheProvider, GorgonPolicySanitized } from "../index";
+
+interface IGorgonMemoryCacheProvider extends IGorgonCacheProvider {
+  keys: () => Promise<string[]>;
+  _clear: (key:string) => boolean;
+}
 
 // Created as a function to allow for multiple instances of the memory cache, if needed
 const MemoryCacheCreator = () =>{
@@ -14,7 +20,7 @@ const MemoryCacheCreator = () =>{
       return;
     },
 
-    get: async key => {
+    get: async (key:string) => {
 
       if (hOP.call(cache, key) && cache[key].val) {
       // The cached item exists, return it
@@ -26,13 +32,13 @@ const MemoryCacheCreator = () =>{
 
     },
 
-    set: async(key, value, policy) => {
+    set: async(key:string, value:any, policy: GorgonPolicySanitized) => {
 
     // Clear in case it exists
       await  memoryCache.clear(key);
 
     // Set a timemout to self-remove from the cache if in policy
-      var to = false;
+      var to = false as boolean | number;
 
       if (policy && policy.expiry && policy.expiry > 0) {
         to = setTimeout(function() {
@@ -55,7 +61,7 @@ const MemoryCacheCreator = () =>{
       return Object.keys(cache);
     },
 
-    clear: async key => {
+    clear: async (key?:string) => {
 
     // Clears a single key or complete clear on empty
     // Clear all items in the cache
@@ -69,7 +75,7 @@ const MemoryCacheCreator = () =>{
       return memoryCache._clear(key);
     },
 
-    _clear: key => {
+    _clear: (key:string) => {
     // Clear a single item, making sure to remove the extra timeout
       if (hOP.call(cache, key)) {
         if (cache[key].to) {
@@ -84,10 +90,10 @@ const MemoryCacheCreator = () =>{
       return false;
     },
 
-  };
+  } as IGorgonMemoryCacheProvider;
 
   return memoryCache;
 
 }
 
-module.exports = MemoryCacheCreator;
+export default MemoryCacheCreator;

@@ -1,4 +1,5 @@
-const Gorgon = require('../index.js');
+import { describe, it, expect } from 'vitest';
+import Gorgon from '../index';
 
 describe('settings', () => {
 
@@ -77,7 +78,8 @@ describe('basic storage', () => {
 
     expect(res).toEqual('failure');
 
-    await jest.runAllTimers();
+    // await a time of 1.5 seconds
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     const res2 = await Gorgon.get('sample3', async() => {
       return 'success';
