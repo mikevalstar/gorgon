@@ -1,6 +1,6 @@
 {
   "name": "@mikevalstar/gorgon",
-  "version": "1.1.2",
+  "version": "1.1.5",
   "description": "A simple caching library for async functons",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

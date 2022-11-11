@@ -3,7 +3,6 @@ import MemoryCache from './provider/memory';
 export type asyncFunction = () => Promise<any> | (() => any);
 export type GorgonSettings = {
   debug: boolean;
-  returnMutator: ((input: any) => any) | null | undefined;
   defaultProvider: string;
   retry: number;
 }
@@ -21,6 +20,11 @@ export type GorgonPolicySanitized = {
   expiry: number | false;
   provider: string;
 };
+type GorgonCurrentTaskItem = Array<{
+  res?: any;
+  rej?: any;
+  queued: Date;
+}>;
 export interface IGorgonCacheProvider {
   init: () => Promise<void>;
   get: (key: string) => Promise<any>;
@@ -31,12 +35,11 @@ export interface IGorgonCacheProvider {
 
 const Gorgon = (() => {
 
-  const currentTasks = {};
+  const currentTasks = {} as {[key: string]: GorgonCurrentTaskItem};
   const hOP = currentTasks.hasOwnProperty;
 
   const settings = {
     debug: false,
-    returnMutator: null,
     defaultProvider: 'memory',
     retry: 5000,
   } as GorgonSettings;
@@ -136,12 +139,7 @@ const Gorgon = (() => {
 
         const val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
 
-        if (settings.returnMutator) {
-          return settings.returnMutator(val);
-        }
-
         return val;
-
       }catch (e) {
         throw e;
       }
@@ -154,14 +152,10 @@ const Gorgon = (() => {
       policy = policyMaker(policy);
       const prov = gorgonCore.providers[policy.provider];
 
-      const currentVal = await prov.get(key); // Most providersw will only lookup by key and return false on not found
+      const currentVal = await prov.get(key); // Most providers will only lookup by key and return false on not found
 
       // If we have a current value sent it out; cache hit!
       if(currentVal !== undefined) {
-        if (settings.returnMutator) {
-          return settings.returnMutator(currentVal);
-        }
-
         return currentVal;
       }
 
@@ -178,7 +172,7 @@ const Gorgon = (() => {
 
         // Add to the current queue
         if(!oldQueue) {
-          var concurent = new Promise(function(resolve, reject) {
+          var concurent = new Promise(function(resolve: (value: R) => void, reject) {
             currentTasks[key].push({
               res: resolve,
               rej: reject,
@@ -186,7 +180,7 @@ const Gorgon = (() => {
             });
           });
 
-          return concurent as Promise<R>; // may be a betetr way to infer this
+          return concurent;
         }
       }else{
         // Add current task to list, this is the first one so the primary
@@ -198,10 +192,6 @@ const Gorgon = (() => {
         const resolvedData = await asyncFunc();
 
         let val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
-
-        if (settings.returnMutator) {
-          val = settings.returnMutator(val);
-        }
 
         if (hOP.call(currentTasks, key)) {
           for (var i in currentTasks[key]) {
