@@ -1,5 +1,5 @@
 {
-  "name": "@mikevalstar/gorgon",
+  "name": "@gorgonjs/gorgon",
   "version": "1.1.5",
   "description": "A simple caching library for async functons",
   "main": "dist/index.js",

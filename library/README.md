@@ -5,11 +5,11 @@ Pass in a cache key, an async function and optionally a cache length and get bac
 
 ## Installation
 
-    npm install @mikevalstar/gorgon
+    npm install @gorgonjs/gorgon
 
-    yarn add @mikevalstar/gorgon
+    yarn add @gorgonjs/gorgon
 
-    pnpm add @mikevalstar/gorgon
+    pnpm add @gorgonjs/gorgon
 
 ## Usage
 See http://gorgonjs.dev for full documentation
@@ -89,8 +89,8 @@ Gorgon.get('sample', resolver, {
 ## Alternate Storage Engines
 
 ```javascript
-var Gorgon = require('@mikevalstar/gorgon');
-var storageCache = require('@mikevalstar/gorgon/storageObjectProvider');
+var Gorgon = require('@gorgonjs/gorgon');
+var storageCache = require('@gorgonjs/gorgon/storageObjectProvider');
 storageCache.setStorage(window.sessionStorage);
 
 Gorgon.addProvider('session', storageCache);

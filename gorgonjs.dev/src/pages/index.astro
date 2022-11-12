@@ -6,7 +6,7 @@ import Prism from 'prismjs';
 
 
 const prismHTML = Prism.highlight(
-  `import Gorgon from '@mikevalstar/gorgon';
+  `import Gorgon from '@gorgonjs/gorgon';
 
 const getTODO = async (id: number) => {
   const cachedValue = await Gorgon.get(\`todo/\${id}\`, async () => {

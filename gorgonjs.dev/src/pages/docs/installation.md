@@ -10,15 +10,15 @@ Add Gorgon to your project and reduce server load **fast**.
 
 ## NPM
 ```bash
-npm install @mikevalstar/gorgon
+npm install @gorgonjs/gorgon
 ```
 
 ## Yarn
 ```bash
-yarn add @mikevalstar/gorgon
+yarn add @gorgonjs/gorgon
 ```
 
 ## PNpM
 ```bash
-pnpm add @mikevalstar/gorgon
+pnpm add @gorgonjs/gorgon
 ```

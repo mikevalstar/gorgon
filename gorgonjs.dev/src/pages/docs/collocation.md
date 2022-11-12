@@ -13,7 +13,7 @@ Query collocation can be a controversial topic and although we believe that coll
 Gorgon can simplify this strategy of collocation by overall reducing the amount of code required to cache, invalidate, and retrieve your cache into a single command.
 
 ```typescript
-import Gorgon from '@mikevalstar/gorgon';
+import Gorgon from '@gorgonjs/gorgon';
 
 const getTODO = async (id: number) => {
   return Gorgon.get(`todo/${id}`, async () => {

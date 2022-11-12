@@ -128,7 +128,7 @@ Lets see how we can simplify this with Gorgon:
 
 ```typescript
 // file concerts.ts
-import Gorgon from '@mikevalstar/gorgon';
+import Gorgon from '@gorgonjs/gorgon';
 
 const concertsGet = async (artist: string) => {
   return Gorgon.get(`concerts/${artist}`, async ():Promise<Array<any>> => {

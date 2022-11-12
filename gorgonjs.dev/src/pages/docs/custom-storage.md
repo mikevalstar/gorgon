@@ -26,7 +26,7 @@ export type GorgonPolicySanitized = {
 After you have implemented your cache provider you can add it using the [addProvider](/docs/usage/addprovider) call then either setting it as the default provider with [settings](/docs/usage/settings) or including it in your [policy](/docs/usage/policies).
 
 ```typescript
-import Gorgon from '@mikevalstar/gorgon';
+import Gorgon from '@gorgonjs/gorgon';
 import myProvider from './myAwesomeProvider';
 
 Gorgon.addProvider('my-awesome-provider', myProvider);

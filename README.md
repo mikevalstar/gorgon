@@ -7,7 +7,7 @@ Gorgon.js is a caching tool for javascript and typescript visit http://gorgonjs.
 ## Install
 
 ```bash
-npm install @mikevalstar/gorgon
+npm install @gorgonjs/gorgon
 ```
 
 ## Support
@@ -17,7 +17,7 @@ Having trouble? email: mike@valstar.dev
 ## Directory
 | Package | Version |
 |---------|---------|
-|@mikevalstar/gorgon|![gorgon version](https://img.shields.io/npm/v/@mikevalstar/gorgon.svg?label=%20)|
+|@gorgonjs/gorgon|![gorgon version](https://img.shields.io/npm/v/@gorgonjs/gorgon.svg?label=%20)|
 
 ## Links
 - http://gorgonjs.dev

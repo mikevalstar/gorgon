@@ -18,7 +18,7 @@ void
 
 ## Example
 ```typescript
-import Gorgon from '@mikevalstar/gorgon';
+import Gorgon from '@gorgonjs/gorgon';
 import myProvider from './myAwesomeProvider';
 
 Gorgon.addProvider('my-awesome-provider', myProvider);
