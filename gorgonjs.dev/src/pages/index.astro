@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Docs.astro';
+import Card from '../components/Card.astro';
+import Prism from 'prismjs';
+
+
+const prismHTML = Prism.highlight(
+  `import Gorgon from '@mikevalstar/gorgon';
+
+  const getTODO = async (id: number) => {}
+    const cachedValue = await Gorgon.get(\`todo_\${id}\`, async () => {
+      return fetch(\`https://jsonplaceholder.typicode.com/todos/\${id}\`)
+        .then(response => response.json());
+    }, 60 * 1000); // 1 minute
+  };
+
+  const todo1 = await getTODO(1); // fetches from API
+  console.log(todo1);
+
+  const todo2 = await getTODO(2); // fetches from API
+  console.log(todo2);
+
+  const todo3 = await getTODO(1); // fetches from cache
+  console.log(todo3);`,
+  Prism.languages.javascript,
+  'javascript'
+);
+---
+
+<Layout title="Welcome to Gorgon.js" selectedNav={'content1'}>
+	<main>
+		<h1>Gorgon.js <em>Version 1.1.5</em></h1>
+    <h2>Faster Frontends, Faster servers, Less database calls</h2>
+    <p>A 9.1kb (2.8kb gzipped) caching library for your application.</p>
+
+		<ul role="list" class="link-card-grid">
+			<Card
+				href="/docs/"
+				title="Documentation"
+				body="Learn how Gorgon works and how to use it."
+			/>
+			<Card
+				href="/docs/integrations"
+				title="Integrations"
+				body="Supercharge your application with Gorgon caching."
+			/>
+			<Card
+				href="https://github.com"
+				title="Github"
+				body="Explore the source code and example projects"
+			/>
+		</ul>
+
+    <p>
+      Gorgon.js is a caching library designed to cache async functions and promises.
+      It can be used in the frontend and backend of your application.
+      Use it with any database, and any framework.
+    </p>
+
+    <pre class="language-javascript"><code class="language-javascript" set:html={prismHTML}></code></pre>
+
+	</main>
+</Layout>
+
+<style>
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 1rem;
+		padding: 0;
+	}
+</style>

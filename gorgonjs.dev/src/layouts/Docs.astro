@@ -1,0 +1,51 @@
+---
+import '../styles/docsLayout.scss';
+
+import Layout from './Layout.astro';
+import DocsNav from '../components/DocsNav.astro';
+
+export interface Props {
+	title: string;
+  selectedNav?: string;
+}
+
+const { title, selectedNav, frontmatter } = Astro.props;
+---
+<Layout title={title || frontmatter.title}>
+  <header id='docs-header'>
+    <div id="docs-nav-overlay">
+      <button id='docs-nav-hamburger'>Hamburger</button>
+    </div>
+    Logo - Search
+  </header>
+  <section id='docs-content'>
+    <nav id='docs-main-nav'>
+      <DocsNav selected={selectedNav || frontmatter.selectedNav} />
+    </nav>
+    <article id='docs-main-article'>
+      <slot />
+      <footer id='docs-footer'>
+        Github - MIT Licensed - Gorgon.js
+      </footer>
+    </article>
+    <div id='docs-right-slot'></div>
+  </section>
+</Layout>
+<script>
+  const hamburger = document.getElementById('docs-nav-hamburger');
+  const nav = document.getElementById('docs-main-nav');
+
+  hamburger?.addEventListener('click', () => {
+    nav?.classList.toggle('show');
+  });
+
+  // When any links in the nav are clicked, hide the nav
+  const navLinks = nav?.getElementsByTagName('a');
+  if(navLinks){
+    for (let i = 0; i < navLinks.length || 0; i++) {
+      navLinks[i].addEventListener('click', () => {
+        nav?.classList.remove('show');
+      });
+    }
+  }
+</script>

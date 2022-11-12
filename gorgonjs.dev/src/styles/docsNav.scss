@@ -1,0 +1,60 @@
+#docs-main-nav {
+  padding: 0 2.5rem;
+
+  // main heading in the nav
+  h3 {
+    margin: 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-text);
+    color: var(--color-text);
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  // sections of the nav
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // section heading
+    li {
+      h4 {
+        margin: 0;
+        margin-top: 1em;
+        padding: 0;
+        padding-top: 1em;
+        padding-bottom: 0.5em;
+        color: var(--color-text);
+        font-size: 1em;
+        font-weight: bold;
+      }
+
+      // section item list
+      ul {
+        // section item
+        li {
+          color: var(--color-text-light);
+          line-height: 2em;
+
+          &.selected {
+            a {
+              background-color: var(--color-hightlight);
+            }
+          }
+
+          a {
+            display: block;
+            padding: 0.1em 0.8em;
+            color: var(--color-text-light);
+            text-decoration: none;
+          }
+
+          a:hover {
+            color: var(--color-text);
+          }
+        }
+      }
+    }
+  }
+}
