@@ -24,7 +24,7 @@ Gorgon will cache the result of any Async function or Promise in memory out of t
 
 ## Example
 
-```javascript
+```typescript
 import Gorgon from '@mikevalstar/gorgon';
 
 const getTODO = async (id: number) => {
