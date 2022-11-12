@@ -1,0 +1,80 @@
+:root {
+  --font-fallback: -apple-system, blinkmacsystemfont, segoe ui, helvetica, arial, sans-serif, apple color emoji, segoe ui emoji;
+  --font-body: system-ui, var(--font-fallback);
+  --font-mono: "IBM Plex Mono", consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", monaco, "Courier New", courier, monospace;
+  --color-background: #28213b;
+  --color-background-light: #3f345d;
+  --color-text: #e3e2e9;
+  --color-text-light: rgb(199 197 211);
+  --color-hightlight: #443673;
+  --color-highlight-bold: #f47d37;
+  --color-scrollbar: rgb(227 226 233 / 20%) rgb(0 0 0 / 0%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  scrollbar-color: var(--color-scrollbar);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+code {
+  font-family: var(--font-mono);
+}
+
+h1 {
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.3;
+
+  em {
+    display: inline-block;
+    font-size: 1rem;
+  }
+}
+
+h2 {
+  margin-bottom: 1rem;
+  font-size: 1.875rem;
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+h3 {
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+p {
+  margin-top: 1.25rem;
+  color: var(--color-text-light);
+  line-height: 1.65;
+}
+
+strong {
+  color: var(--color-text);
+  font-weight: bold;
+}
+
+a {
+  transition: color 0.2s ease-in-out;
+  color: var(--color-highlight-bold);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-highlight-bold);
+  }
+}

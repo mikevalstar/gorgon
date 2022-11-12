@@ -1,0 +1,62 @@
+---
+import '../styles/docsLayout.scss';
+import '../styles/docsPage.scss';
+
+import Layout from './Layout.astro';
+import DocsNav from '../components/DocsNav.astro';
+import PagefindSearch from '../components/PagefindSearch.astro';
+
+export interface Props {
+	title: string;
+  selectedNav?: string;
+}
+
+const { title, selectedNav, frontmatter } = Astro.props;
+---
+<Layout title={title || frontmatter.title}>
+  <header id='docs-header'>
+    <div id="docs-nav-overlay">
+      {/*svg of hanburger icon here*/}
+
+      <button id='docs-nav-hamburger'>
+        <svg viewBox="0 0 100 80" width="35" height="35">
+          <rect y="20" width="80" height="8"></rect>
+          <rect y="50" width="80" height="8"></rect>
+          <rect y="80" width="80" height="8"></rect>
+        </svg>
+      </button>
+    </div>
+    <sitename><a href="/">Gorgon.js</a></sitename>
+    <PagefindSearch />
+  </header>
+  <section id='docs-content'>
+    <nav id='docs-main-nav'>
+      <DocsNav selected={selectedNav || frontmatter.selectedNav} />
+    </nav>
+    <article id='docs-main-article'>
+      <slot />
+      <footer id='docs-footer'>
+        <a href="https://github.com/mikevalstar/gorgon">Github</a> - Gorgon.js - <a href="https://mit-license.org/">MIT Licensed</a>
+      </footer>
+    </article>
+    <div id='docs-right-slot'></div>
+  </section>
+</Layout>
+<script>
+  const hamburger = document.getElementById('docs-nav-hamburger');
+  const nav = document.getElementById('docs-main-nav');
+
+  hamburger?.addEventListener('click', () => {
+    nav?.classList.toggle('show');
+  });
+
+  // When any links in the nav are clicked, hide the nav
+  const navLinks = nav?.getElementsByTagName('a');
+  if(navLinks){
+    for (let i = 0; i < navLinks.length || 0; i++) {
+      navLinks[i].addEventListener('click', () => {
+        nav?.classList.remove('show');
+      });
+    }
+  }
+</script>

@@ -1,0 +1,75 @@
+---
+export interface Props {
+	selected?: string;
+}
+
+const { selected } = Astro.props;
+---
+<h3>Docs</h3>
+<ul class='navmain'>
+  <li>
+    <summary>
+      <h4>Start Here</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'getting-started' ? 'selected' : ''}><a href="/docs/getting-started">Getting Started</a></li>
+      <li class={selected === 'installation' ? 'selected' : ''}><a href="/docs/installation">Installation</a></li>
+      {/*<li class={selected === 'caching-concepts' ? 'selected' : ''}><a href="/docs/caching-concepts">Caching Concepts</a></li>*/}
+      <li class={selected === 'error-handling' ? 'selected' : ''}><a href="/docs/error-handling">Error Handling</a></li>
+    </ul>
+  </li>
+  <li>
+    <summary>
+      <h4>Why Gorgon?</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'simplified' ? 'selected' : ''}><a href="/docs/simplified">Caching Simplified</a></li>
+      <li class={selected === 'concurrency' ? 'selected' : ''}><a href="/docs/concurrency">Concurrency Protection</a></li>
+      <li class={selected === 'collocation' ? 'selected' : ''}><a href="/docs/collocation">Query Collocation</a></li>
+    </ul>
+  </li>
+  <li>
+    <summary>
+      <h4>Basics</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'usage-get' ? 'selected' : ''}><a href="/docs/usage/get">Get</a></li>
+      <li class={selected === 'usage-put' ? 'selected' : ''}><a href="/docs/usage/put">Put</a></li>
+      <li class={selected === 'usage-clear' ? 'selected' : ''}><a href="/docs/usage/clear">Clear</a></li>
+      <li class={selected === 'usage-overwrite' ? 'selected' : ''}><a href="/docs/usage/overwrite">Overwrite</a></li>
+      <li class={selected === 'usage-policies' ? 'selected' : ''}><a href="/docs/usage/policies">Policies</a></li>
+      <li class={selected === 'usage-addprovider' ? 'selected' : ''}><a href="/docs/usage/addprovider">AddProvider</a></li>
+      <li class={selected === 'usage-settings' ? 'selected' : ''}><a href="/docs/usage/settings">Settings</a></li>
+    </ul>
+  </li>
+  {/*<li>
+    <summary>
+      <h4>Server Usage</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'server-basics' ? 'selected' : ''}><a href="/docs/server/basics">Basic Usage</a></li>
+      <li class={selected === 'server-astro' ? 'selected' : ''}><a href="/docs/server/astro">Astro</a></li>
+      <li class={selected === 'server-prisma' ? 'selected' : ''}><a href="/docs/server/prisma">Prisma</a></li>
+      <li class={selected === 'server-examples' ? 'selected' : ''}><a href="/docs/servers/examples">Example Projects</a></li>
+    </ul>
+  </li>
+  <li>
+    <summary>
+      <h4>Frontend</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'ui-vanilla' ? 'selected' : ''}><a href="/docs/ui/vanilla">Vanilla JS</a></li>
+      <li class={selected === 'ui-react' ? 'selected' : ''}><a href="/docs/ui/react">React</a></li>
+      <li class={selected === 'ui-examples' ? 'selected' : ''}><a href="/docs/ui/examples">Example Projects</a></li>
+    </ul>
+  </li>*/}
+  <li>
+    <summary>
+      <h4>Advanced</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'custom-storage' ? 'selected' : ''}><a href="/docs/custom-storage">Custom Storage Providers</a></li>
+      <li class={selected === 'retry' ? 'selected' : ''}><a href="/docs/retry">Retry Thresholds</a></li>
+    </ul>
+  </li>
+</ul>

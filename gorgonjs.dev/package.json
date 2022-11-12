@@ -1,0 +1,35 @@
+{
+  "name": "@example/basics",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build; npx -y pagefind --source dist",
+    "build:preview" : "astro build; npx -y pagefind --source dist --serve",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/prism": "1.0.2",
+    "astro": "^1.6.7",
+    "prismjs": "^1.29.0"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "^1.0.0",
+    "@typescript-eslint/parser": "^5.42.1",
+    "eslint": "^8.27.0",
+    "eslint-plugin-astro": "^0.21.0",
+    "postcss": "^8.4.19",
+    "sass": "^1.56.1",
+    "sharp": "^0.31.2",
+    "stylelint": "^14.14.1",
+    "stylelint-config-property-sort-order-smacss": "^9.0.0",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-config-standard-scss": "^6.1.0",
+    "typescript": "^4.8.4",
+    "vite": "^3.2.3",
+    "vite-plugin-compression": "^0.5.1"
+  }
+}

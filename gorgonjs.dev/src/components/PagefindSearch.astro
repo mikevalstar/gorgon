@@ -1,0 +1,28 @@
+---
+
+---
+<link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/_pagefind/pagefind-ui.js" type="text/javascript"></script>
+<div id="search"></div>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+      new PagefindUI({ element: "#search", showImages: false });
+
+      // wait for the .pagefind-ui__search-input input to be available
+      // then attach a listener to it
+      const searchInput = document.querySelector('.pagefind-ui__search-input');
+      searchInput?.addEventListener('input', (event) => {
+        if (event?.target?.value?.length > 0) {
+          document.querySelector('#search')?.classList.add('pagefind-ui--active');
+        } else {
+          document.querySelector('#search')?.classList.remove('pagefind-ui--active');
+        }
+      });
+      searchInput?.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          searchInput.value = '';
+          searchInput.dispatchEvent(new Event("input"))
+        }
+      });
+  });
+</script>

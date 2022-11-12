@@ -1,0 +1,156 @@
+@import "docsNav";
+
+$navheight: 5em;
+
+#docs-header {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $navheight;
+  background: var(--color-background);
+}
+
+#docs-nav-overlay {
+  display: none;
+}
+
+// a 3 column layout
+// the left and right column will scroll independently
+#docs-main-nav {
+  position: fixed;
+  top: $navheight;
+  left: 0;
+  width: 20em;
+  height: calc(100vh - $navheight);
+  scrollbar-color: var(--color-scrollbar);
+  overflow-y: auto;
+  background: var(--color-background);
+}
+
+#docs-main-article {
+  width: 50em;
+  margin: auto;
+  margin-top: $navheight;
+  padding: 0 1em;
+}
+
+#docs-right-slot {
+  position: fixed;
+  top: $navheight;
+  right: 0;
+  width: 20em;
+  height: calc(100vh - $navheight);
+  overflow-y: auto;
+}
+
+#docs-footer {
+  padding-top: 3em;
+  padding-bottom: 2em;
+  text-align: center;
+}
+
+// on mobile the nav and right slot will be hidden
+// and the main article will take up the whole screen
+// show and hide the nav with the button in the header
+@media (max-width: 768px) {
+  #docs-nav-overlay {
+    display: block;
+    float: right;
+  }
+
+  #docs-main-nav {
+    display: none;
+
+    &.show {
+      display: block;
+      position: fixed;
+      z-index: 2;
+      top: $navheight;
+      left: 0;
+      width: 100%;
+      height: calc(100vh - $navheight);
+    }
+  }
+
+  #docs-right-slot {
+    display: none;
+  }
+
+  #docs-main-article {
+    width: 100%;
+  }
+}
+
+// Search specifics; we should rewrite the ui later
+
+#search {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 650px;
+  max-height: 100vh;
+  margin: 0 auto;
+  padding: 0.5em;
+  overflow-y: auto;
+
+  //background: var(--color-background);
+
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: #034ad8;
+  --pagefind-ui-text: #e3e2e9;
+  --pagefind-ui-background: transparent;
+  --pagefind-ui-border: transparent;
+  --pagefind-ui-tag: green;
+  --pagefind-ui-border-width: 0;
+  --pagefind-ui-border-radius: 0;
+  --pagefind-ui-image-border-radius: 0;
+  --pagefind-ui-image-box-ratio: 3 / 2;
+  --pagefind-ui-font: var(--font-body);
+
+  mark {
+    background-color: var(--color-hightlight);
+    color: var(--color-text-bold);
+  }
+
+  .pagefind-ui__search-input {
+    background-color: var(--color-background);
+  }
+}
+
+@media (max-width: 768px) {
+  #search {
+    display: none;
+  }
+}
+
+#search ol.pagefind-ui__results {
+  margin: 0;
+  padding: 0;
+}
+
+#search ol.pagefind-ui__results li.pagefind-ui__result {
+  margin: 0;
+  padding: 0;
+
+  a {
+    color: var(--color-highlight-bold);
+  }
+}
+
+#search .pagefind-ui__drawer {
+  padding: 0.5em 1em;
+  border: 2px solid rgb(0 0 0 / 20%);
+  background-color: var(--color-background-light);
+}
+
+#search.pagefind-ui--active {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+}
