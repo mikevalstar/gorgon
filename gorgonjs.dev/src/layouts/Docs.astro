@@ -4,6 +4,7 @@ import '../styles/docsPage.scss';
 
 import Layout from './Layout.astro';
 import DocsNav from '../components/DocsNav.astro';
+import PagefindSearch from '../components/PagefindSearch.astro';
 
 export interface Props {
 	title: string;
@@ -17,7 +18,7 @@ const { title, selectedNav, frontmatter } = Astro.props;
     <div id="docs-nav-overlay">
       <button id='docs-nav-hamburger'>Hamburger</button>
     </div>
-    Logo - Search
+    <h1><a href="/">Gorgon</a></h1> <PagefindSearch />
   </header>
   <section id='docs-content'>
     <nav id='docs-main-nav'>
