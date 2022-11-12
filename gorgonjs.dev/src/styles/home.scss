@@ -1,0 +1,33 @@
+.link-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+  gap: 1rem;
+  padding: 0;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2em;
+
+  ul {
+    margin: 0;
+    padding: 0 1.5em;
+  }
+}
+
+.two-columns > div {
+  padding: 1rem;
+}
+
+// on mobile we want to stack the columns
+@media (max-width: 768px) {
+  .two-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .two-columns > div {
+    padding: 0;
+  }
+}

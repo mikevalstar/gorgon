@@ -67,3 +67,13 @@ strong {
   color: var(--color-text);
   font-weight: bold;
 }
+
+a {
+  transition: color 0.2s ease-in-out;
+  color: var(--color-highlight-bold);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-highlight-bold);
+  }
+}

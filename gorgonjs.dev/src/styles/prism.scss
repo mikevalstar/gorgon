@@ -20,6 +20,11 @@ pre[class*="language-"] {
   word-spacing: normal;
   hyphens: none;
   tab-size: 4;
+
+  // on mobile smaller fonts
+  @media (max-width: 768px) {
+    font-size: 0.95em;
+  }
 }
 
 code[class*="language-"]::selection,
@@ -40,6 +45,11 @@ pre[class*="language-"] {
   margin: 0.5em 0;
   padding: 1.25em 1em;
   overflow: auto;
+
+  // on mobile less padding
+  @media (max-width: 768px) {
+    padding: 0.5em 0.25em;
+  }
 }
 
 .language-css > code,

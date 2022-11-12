@@ -4,8 +4,8 @@
   // main heading in the nav
   h3 {
     margin: 0;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-text);
+    padding: 0.5rem 0.8rem;
+    border-bottom: 3px solid var(--color-text);
     color: var(--color-text);
     font-size: 1.25rem;
     font-weight: bold;
@@ -35,7 +35,7 @@
         // section item
         li {
           color: var(--color-text-light);
-          line-height: 2em;
+          line-height: 1.8em;
 
           &.selected {
             a {

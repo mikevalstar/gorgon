@@ -5,7 +5,7 @@ export interface Props {
 
 const { selected } = Astro.props;
 ---
-<h3>Learn</h3>
+<h3>Docs</h3>
 <ul class='navmain'>
   <li>
     <summary>
@@ -15,6 +15,17 @@ const { selected } = Astro.props;
       <li class={selected === 'getting-started' ? 'selected' : ''}><a href="/docs/getting-started">Getting Started</a></li>
       <li class={selected === 'installation' ? 'selected' : ''}><a href="/docs/installation">Installation</a></li>
       <li class={selected === 'caching-concepts' ? 'selected' : ''}><a href="/docs/caching-concepts">Caching Concepts</a></li>
+      <li class={selected === 'error-handling' ? 'selected' : ''}><a href="/docs/error-handling">Error Handling</a></li>
+    </ul>
+  </li>
+  <li>
+    <summary>
+      <h4>Why Gorgon?</h4>
+    </summary>
+    <ul>
+      <li class={selected === 'simplified' ? 'selected' : ''}><a href="/docs/simplified">Caching Simplified</a></li>
+      <li class={selected === 'concurrency' ? 'selected' : ''}><a href="/docs/concurrency">Concurrency Protection</a></li>
+      <li class={selected === 'collocation' ? 'selected' : ''}><a href="/docs/collocation">Query Collocation</a></li>
     </ul>
   </li>
   <li>
@@ -27,6 +38,7 @@ const { selected } = Astro.props;
       <li class={selected === 'clear' ? 'selected' : ''}><a href="/docs/usage/clear">Clear</a></li>
       <li class={selected === 'overwrite' ? 'selected' : ''}><a href="/docs/usage/overwrite">Overwrite</a></li>
       <li class={selected === 'policies' ? 'selected' : ''}><a href="/docs/usage/policies">Policies</a></li>
+      <li class={selected === 'settings' ? 'selected' : ''}><a href="/docs/usage/settings">Settings</a></li>
     </ul>
   </li>
   <li>
@@ -53,6 +65,7 @@ const { selected } = Astro.props;
     </summary>
     <ul>
       <li class={selected === 'custom-storage' ? 'selected' : ''}><a href="/docs/custom-storage">Custom Storage Providers</a></li>
+      <li class={selected === 'retry' ? 'selected' : ''}><a href="/docs/retry">Retry Thresholds</a></li>
     </ul>
   </li>
 </ul>

@@ -33,6 +33,7 @@ $navheight: 5em;
   width: 50em;
   margin: auto;
   margin-top: $navheight;
+  padding: 0 1em;
 }
 
 #docs-right-slot {
@@ -46,6 +47,7 @@ $navheight: 5em;
 
 #docs-footer {
   padding-top: 3em;
+  padding-bottom: 2em;
   text-align: center;
 }
 
