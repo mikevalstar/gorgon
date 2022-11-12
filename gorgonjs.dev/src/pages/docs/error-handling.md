@@ -19,7 +19,7 @@ By not retrying requests this effectively backs off the connection and reduces l
 ## Example
 In the example below the async function will only be called 3 times, once for each id passed to main.
 
-```javascript
+```typescript
 import Gorgon from './index';
 
 const getTODO = async (id: number) => {

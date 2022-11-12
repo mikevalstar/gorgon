@@ -17,7 +17,7 @@ e.g. prisma-redis-middleware does not offer a way to manually invalidate a cache
 ## Standard Approaches
 A standard approach to writing a simple cache for your application be something like this:
 
-```javascript
+```typescript
 // file concerts.ts
 let concertCache = {} as Record<string, any>;
 
@@ -56,7 +56,7 @@ The above solution will work in many situations but it will have issues scaling,
 
 So lets fix that with a standard lock and a cache expiry: (_note: we dont properly case in for error or edge cases in this example, please don't use this example_)
 
-```javascript
+```typescript
 // file concerts.ts
 let concertCache = {} as Record<string, {expiryTimeout:number, data: any}>;
 let concertCacheLocks = {} as Record<string, boolean>;
@@ -126,7 +126,7 @@ Thats a lot of boilerplate for every object you want to cache!
 
 Lets see how we can simplify this with Gorgon: 
 
-```javascript
+```typescript
 // file concerts.ts
 import Gorgon from '@mikevalstar/gorgon';
 

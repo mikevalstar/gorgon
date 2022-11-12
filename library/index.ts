@@ -93,7 +93,7 @@ const Gorgon = (() => {
     },
 
     // Add a provider
-    addProvider: (name: string, provider) => {
+    addProvider: (name: string, provider:IGorgonCacheProvider) => {
       provider.init(); // Trigger for provider to clear any old cache items or any other cleanup
       gorgonCore.providers[name] = provider;
     },
