@@ -38,16 +38,18 @@ const { selected } = Astro.props;
       <li class={selected === 'clear' ? 'selected' : ''}><a href="/docs/usage/clear">Clear</a></li>
       <li class={selected === 'overwrite' ? 'selected' : ''}><a href="/docs/usage/overwrite">Overwrite</a></li>
       <li class={selected === 'policies' ? 'selected' : ''}><a href="/docs/usage/policies">Policies</a></li>
+      <li class={selected === 'addprovider' ? 'selected' : ''}><a href="/docs/usage/addprovider">AddProvider</a></li>
       <li class={selected === 'settings' ? 'selected' : ''}><a href="/docs/usage/settings">Settings</a></li>
     </ul>
   </li>
-  <li>
+  {/*<li>
     <summary>
       <h4>Server Usage</h4>
     </summary>
     <ul>
       <li class={selected === 'server-basics' ? 'selected' : ''}><a href="/docs/server/basics">Basic Usage</a></li>
       <li class={selected === 'server-astro' ? 'selected' : ''}><a href="/docs/server/astro">Astro</a></li>
+      <li class={selected === 'server-examples' ? 'selected' : ''}><a href="/docs/servers/examples">Example Projects</a></li>
     </ul>
   </li>
   <li>
@@ -57,8 +59,9 @@ const { selected } = Astro.props;
     <ul>
       <li class={selected === 'ui-vanilla' ? 'selected' : ''}><a href="/docs/ui/vanilla">Vanilla JS</a></li>
       <li class={selected === 'ui-react' ? 'selected' : ''}><a href="/docs/ui/react">React</a></li>
+      <li class={selected === 'ui-examples' ? 'selected' : ''}><a href="/docs/ui/examples">Example Projects</a></li>
     </ul>
-  </li>
+  </li>*/}
   <li>
     <summary>
       <h4>Advanced</h4>
