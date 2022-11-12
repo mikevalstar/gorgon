@@ -43,6 +43,3 @@ console.log(todo2);
 const todo3 = await getTODO(1); // fetches from cache
 console.log(todo3);
 ```
-## Example Projects
-
-- TODO

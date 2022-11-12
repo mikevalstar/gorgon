@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build; npx -y pagefind --source dist",
     "build:preview" : "astro build; npx -y pagefind --source dist --serve",
     "preview": "astro preview",
     "astro": "astro"

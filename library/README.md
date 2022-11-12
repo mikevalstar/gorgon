@@ -1,11 +1,7 @@
 # Gorgon
-An async based caching library for node or the browser.
+An typescript async based caching library for node or the browser.
 
 Pass in a cache key, an async function and optionally a cache length and get back a cached object.
-
-Medusa supports
-* Memory storage
-* Local / session storage (coming soon)
 
 ## Installation
 
@@ -16,69 +12,7 @@ Medusa supports
     pnpm add @mikevalstar/gorgon
 
 ## Usage
-
-```javascript
-var Gorgon = require('@mikevalstar/gorgon');
-
-function ex() {
-  return Gorgon.get('sample', async() => {
-    console.log('cache miss');
-    return 'example';
-  }, 1000);
-}
-
-
-ex().then(res => {
-  console.log(res);
-});
-
-ex().then(res => {
-  console.log(res);
-});
-
-ex().then(res => {
-  console.log(res);
-});
-
-/* returns:
-cache miss
-example
-example
-example */
-```
-
-```typescript
-import Gorgon from '@mikevalstar/gorgon';
-
-const ex = async() => {
-  return Gorgon.get('sample', async() => {
-    console.log('cache miss');
-    return 'example';
-  }, 1000);
-}
-
-const res1 = await ex();
-console.log(res1);
-
-const res2 = await ex();
-console.log(res2);
-
-const res3 = await ex();
-console.log(res3);
-
-/* returns:
-cache miss
-example
-example
-example */
-```
-
-## Project TODO
-
-- [ ] Local storage provider
-- [ ] Redis storage provider
-- [ ] Examples
-- [ ] More documentation
+See http://gorgonjs.dev for full documentation
 
 ## API
 

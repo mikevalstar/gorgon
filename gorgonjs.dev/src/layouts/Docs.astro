@@ -16,9 +16,17 @@ const { title, selectedNav, frontmatter } = Astro.props;
 <Layout title={title || frontmatter.title}>
   <header id='docs-header'>
     <div id="docs-nav-overlay">
-      <button id='docs-nav-hamburger'>Hamburger</button>
+      {/*svg of hanburger icon here*/}
+
+      <button id='docs-nav-hamburger'>
+        <svg viewBox="0 0 100 80" width="35" height="35">
+          <rect y="20" width="80" height="8"></rect>
+          <rect y="50" width="80" height="8"></rect>
+          <rect y="80" width="80" height="8"></rect>
+        </svg>
+      </button>
     </div>
-    <sitename><a href="/">Gorgon</a></sitename>
+    <sitename><a href="/">Gorgon.js</a></sitename>
     <PagefindSearch />
   </header>
   <section id='docs-content'>

@@ -9,7 +9,9 @@ selectedNav: error-handling
 When you're caching an async function an error can of course happen inside the function, 
 a HTTPS call fails, a database call times out, or maybe you've just decided to throw an error?
 
-When an error happens the call will only happen once but all instances will receive a thrown copy of the error.
+When an error happens the call will only happen once but all concurrent instances will receive a thrown copy of the error.
+
+Note: The returned error is not cached, the next request after the error will try again.
 
 ## Why Not Retry on Error?
 
