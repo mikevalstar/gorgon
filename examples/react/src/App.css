@@ -1,0 +1,20 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* containers for our examples, just a simple 2 column grid */
+.example-containers{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 2rem;
+
+  text-align: left;
+}
+
+/* the nav is just come buttons to switch between examples space them apart */
+button{
+  margin: 0 0.5rem;
+}
