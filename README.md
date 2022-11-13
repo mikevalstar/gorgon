@@ -22,7 +22,8 @@ Having trouble? [join our discord](https://discord.gg/54Z2GscCJr)
 | Package | Version |
 |---------|---------|
 |@gorgonjs/gorgon|![gorgon version](https://img.shields.io/npm/v/@gorgonjs/gorgon.svg?label=%20)|
+|@gorgonjs/react|![gorgon react version](https://img.shields.io/npm/v/@gorgonjs/react.svg?label=%20)|
 
 ## Links
-- [official wevsite](http://gorgonjs.dev)
+- [Official website](http://gorgonjs.dev)
 - [MIT license]('./LICENSE)

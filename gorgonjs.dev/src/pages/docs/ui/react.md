@@ -12,9 +12,17 @@ With react you can often use the same components on different pages and you may 
 This allows you to [collocate](../collocation.md) your queries and mutations within your components and use them without having to worry about passing props around.
 
 Below we have:
+- [Official Package](#official-package)
 - [Basic Usage](#basic-usage)
 - [Simple Custom Hook Example](#simple-custom-hook-example)
 - [Fully Featured useGorgon Hook](#fully-featured-usegorgon-hook)
+
+## Official Package
+The official package for react is [`@gorgonjs/react`](https://www.npmjs.com/package/@gorgonjs/react) and can be installed with `npm i @gorgonjs/react`, `yarn add @gorgonjs/react` or `pnpm add @gorgonjs/react`.
+
+The package works the same as is defined in the below [useGorgon Hook](#fully-featured-usegorgon-hook)
+
+Additional documentation will be coming soon.
 
 ## Basic Usage
 
@@ -157,6 +165,7 @@ export default function useGorgon <R>(key: string, asyncFunc: () => Promise<R>, 
         if(isStillMounted){
           if(opts.debug) console.info('Gorgon returned the data from the function', returnedData);
           setData(await returnedData);
+          setError(null);
           setLoading(false);
         }
       }).catch(
