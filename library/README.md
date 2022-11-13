@@ -1,6 +1,6 @@
 # Gorgon
 ![coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)
-![size](https://img.shields.io/badge/size-9.23KB-brightgreen)
+![size](https://img.shields.io/badge/size-9.92KB-brightgreen)
 ![version](https://img.shields.io/badge/version-1.2.0-blue)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 

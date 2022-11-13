@@ -156,6 +156,7 @@ const Gorgon = (() => {
 
       // If we have a current value sent it out; cache hit!
       if(currentVal !== undefined) {
+        if(settings.debug) console.info('[Gorgon] Cache hit for key: ' + key, currentVal);
         return currentVal;
       }
 
@@ -172,6 +173,8 @@ const Gorgon = (() => {
 
         // Add to the current queue
         if(!oldQueue) {
+          if(settings.debug) console.info('[Gorgon] Cache miss, in progress, adding to current queue for key: ' + key);
+
           var concurent = new Promise(function(resolve: (value: R) => void, reject) {
             currentTasks[key].push({
               res: resolve,
@@ -188,14 +191,20 @@ const Gorgon = (() => {
       }
 
       try{
+        if(settings.debug) console.info('[Gorgon] Cache miss, resolving item for: ' + key);
+
         // This is the primary item, lets resolve and push it out
         const resolvedData = await asyncFunc();
+
+        if(settings.debug) console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);
 
         let val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
 
         if (hOP.call(currentTasks, key)) {
           for (var i in currentTasks[key]) {
             if(currentTasks[key][i].res) {
+              if(settings.debug) console.info('[Gorgon] Cache queue resolved for: ' + key, resolvedData);
+
               currentTasks[key][i].res(val);
             }
           }
