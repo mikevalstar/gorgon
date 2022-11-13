@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@gorgonjs/gorgon': ^1.2.0
+  '@gorgonjs/react': ^1.1.11
   '@types/react': ^18.0.24
   '@types/react-dom': ^18.0.8
   '@vitejs/plugin-react': ^2.2.0
@@ -14,6 +15,7 @@ specifiers:
 
 dependencies:
   '@gorgonjs/gorgon': 1.2.0
+  '@gorgonjs/react': 1.1.11_react@18.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -332,6 +334,15 @@ packages:
 
   /@gorgonjs/gorgon/1.2.0:
     resolution: {integrity: sha512-BNQ5/UotJJHXw+BPUPvWi8PbjklN1/DfF88ovWC5KStSHZRx8q/fsxKsiYbQ8uymcEhMp7quAeR6Fbd7KYjKPQ==}
+    dev: false
+
+  /@gorgonjs/react/1.1.11_react@18.2.0:
+    resolution: {integrity: sha512-sKMgtyZFkodyPLEO0tB0FmsfoZAFXi0u1d49mWrtj+iPxKY2F//1z2RdeBY2ttoHwSLoWTbnfoLuIKaIKgRPGw==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      '@gorgonjs/gorgon': 1.2.0
+      react: 18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.7:

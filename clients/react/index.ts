@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Gorgon, {GorgonPolicyInput} from '@gorgonjs/gorgon';
 
-type UseGorgonOptions = {
+export type UseGorgonOptions = {
   debug?: boolean;
 };
 
@@ -9,7 +9,8 @@ const defaultOptions = {
   debug: false
 } as UseGorgonOptions;
 
-export default function useGorgon <R>(key: string, asyncFunc: () => Promise<R>, policy?: GorgonPolicyInput, options?:UseGorgonOptions) {
+// Wraps the Gorgon get method with a React hook
+export const useGorgon = <R>(key: string, asyncFunc: () => Promise<R>, policy?: GorgonPolicyInput, options?:UseGorgonOptions) => {
   const [data, setData] = useState<null | R>(null);
   const [error, setError] = useState<null | Error>(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ export default function useGorgon <R>(key: string, asyncFunc: () => Promise<R>, 
           if(opts.debug) console.error('Gorgon error', err);
           if(isStillMounted){
             setError(err);
+            setData(null);
             setLoading(false);
           }
         }
@@ -51,3 +53,10 @@ export default function useGorgon <R>(key: string, asyncFunc: () => Promise<R>, 
 
   return {data, error, loading, refetch};
 }
+
+// helper function to clear the cache
+export const clearGorgon = (key?: string) => {
+  Gorgon.clear(key);
+}
+
+export { Gorgon };

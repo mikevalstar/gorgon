@@ -157,6 +157,7 @@ export default function useGorgon <R>(key: string, asyncFunc: () => Promise<R>, 
         if(isStillMounted){
           if(opts.debug) console.info('Gorgon returned the data from the function', returnedData);
           setData(await returnedData);
+          setError(null);
           setLoading(false);
         }
       }).catch(
