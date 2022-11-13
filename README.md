@@ -4,6 +4,10 @@
 
 Gorgon.js is a caching tool for javascript and typescript visit http://gorgonjs.dev for full documentation.
 
+<p align="center">
+  <img src="./logo.svg" width="300" height="300" align="center" />
+</p>
+
 ## Install
 
 ```bash
