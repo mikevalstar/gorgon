@@ -1,7 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterAll } from 'vitest';
 import Gorgon from '../index';
 
 describe('settings', () => {
+
+  afterAll(() => {
+    Gorgon.settings({debug: false});
+  });
 
   it('returns default settings', () => {
 
