@@ -43,14 +43,14 @@ export default function SimpleExample() {
   if(loading) return <div>Loading...</div>;
 
   return <div>
-    <h2>Simple Example</h2>
+    <h2>Fully built useGorgon Example</h2>
     <div className='example-containers'>
       <div>
         {error && <div>Error: {error.message}</div>}
         <ul>
-          <li>Title: {jsonData && jsonData.title}</li>
-          <li>Fetched data at: {jsonData && formatDate(jsonData.fetchedDate)}</li>
-          <li>Rendered at: {formatDate(new Date())}</li>
+          <li>🕮 Title: {jsonData && jsonData.title || 'loading...'}</li>
+          <li>🕰️ Fetched data at: {jsonData && formatDate(jsonData.fetchedDate)}</li>
+          <li>⏲️ Rendered at: {formatDate(new Date())}</li>
         </ul>
         <button onClick={() => {setFetchUrl('http://badurl.cccccc')}}>Force error state</button>
         <button onClick={() => {setFetchUrl('https://jsonplaceholder.typicode.com/todos/1')}}>Good Url</button>
@@ -59,9 +59,17 @@ export default function SimpleExample() {
       <div>
         <h3>What this Does</h3>
         <p>
-          This example will fetch from the API exactly once every <strong>10 seconds.</strong> when rendering.
-          You can switch between the other examples to se it in action.
-          This version uses the useGorgonSimple hook to simplify fetching data for the user.
+          https://jsonplaceholder.typicode.com/todos/1
+          will be queried with a 3 second timeout to simulate a slow request.
+        </p>
+        <p>
+          We use Gorgon to cache this response for 10 seconds,
+          this example uses the fully built useGorgon hook from the lib/useGorgon.ts file.
+          This is the base hook that you can use to build your own custom hook and is the basis of the @gorgon/react version of useGorgon.
+        </p>
+        <p>
+          If you swicth between this and the otehr examples,
+          you can see that this will not reload if you switch back within 10 seconds.
         </p>
       </div>
     </div>

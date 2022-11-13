@@ -31,24 +31,31 @@ const formatDate = (date: Date | null | undefined) => {
 // A simple component that fetches data from an API and displays it
 export default function SimpleExample() {
 
-  const jsonData = useGorgonSimple('todos_simpleexample', getDetails, 10000);
+  const jsonData = useGorgonSimple('todos_usesimpleexample', getDetails, 10000);
 
   return <div>
-    <h2>Simple Example</h2>
+    <h2>Simple useGorgon Example</h2>
     <div className='example-containers'>
       <div>
-        <ul>
-          <li>Title: {jsonData && jsonData.title}</li>
-          <li>Fetched data at: {jsonData && formatDate(jsonData.fetchedDate)}</li>
-          <li>Rendered at: {formatDate(new Date())}</li>
+      <ul>
+          <li>🕮 Title: {jsonData && jsonData.title || 'loading...'}</li>
+          <li>🕰️ Fetched data at: {jsonData && formatDate(jsonData.fetchedDate)}</li>
+          <li>⏲️ Rendered at: {formatDate(new Date())}</li>
         </ul>
       </div>
       <div>
         <h3>What this Does</h3>
         <p>
-          This example will fetch from the API exactly once every <strong>10 seconds.</strong> when rendering.
-          You can switch between the other examples to se it in action.
-          This version uses the useGorgonSimple hook to simplify fetching data for the user.
+          https://jsonplaceholder.typicode.com/todos/1
+          will be queried with a 3 second timeout to simulate a slow request.
+        </p>
+        <p>
+          We use Gorgon to cache this response for 10 seconds, using a simple implementation of the useReact hook.
+          you can view this implementation in the lib/useGorgonSimple.ts file.
+        </p>
+        <p>
+          If you swicth between this and the otehr examples,
+          you can see that this will not reload if you switch back within 10 seconds.
         </p>
       </div>
     </div>
