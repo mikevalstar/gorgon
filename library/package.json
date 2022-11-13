@@ -1,7 +1,8 @@
 {
   "name": "@gorgonjs/gorgon",
   "version": "1.2.0",
-  "description": "A simple caching library for async functons",
+  "description": "A simple caching library for async functions",
+  "homepage": "https://gorgonjs.dev",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,9 +18,10 @@
   "keywords": [
     "cache",
     "promise",
-    "async"
+    "async",
+    "typescript"
   ],
-  "author": "Mike Valstar <mikevalstar@gmail.com>",
+  "author": "Mike Valstar <mike@valstar.dev>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mikevalstar/gorgon/issues"

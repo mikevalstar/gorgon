@@ -1,5 +1,10 @@
 # Gorgon
-An typescript async based caching library for node or the browser.
+![coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)
+![size](https://img.shields.io/badge/size-9.23KB-brightgreen)
+![version](https://img.shields.io/badge/version-1.2.0-blue)
+![license](https://img.shields.io/badge/license-MIT-blue)
+
+A typescript async based caching library for node or the browser.
 
 Pass in a cache key, an async function and optionally a cache length and get back a cached object.
 

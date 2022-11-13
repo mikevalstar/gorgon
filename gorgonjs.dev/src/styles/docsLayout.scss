@@ -30,7 +30,7 @@ $navheight: 5em;
 }
 
 #docs-main-article {
-  width: 50em;
+  max-width: 50em;
   margin: auto;
   margin-top: $navheight;
   padding: 0 1em;
@@ -51,10 +51,22 @@ $navheight: 5em;
   text-align: center;
 }
 
+// on small screens we eliminate the right hand column
+// and move the main article to the right
+@media (max-width: 1400px) {
+  #docs-main-article {
+    margin-left: 22em;
+  }
+
+  #docs-right-slot {
+    display: none;
+  }
+}
+
 // on mobile the nav and right slot will be hidden
 // and the main article will take up the whole screen
 // show and hide the nav with the button in the header
-@media (max-width: 768px) {
+@media (max-width: 1010px) {
   #docs-nav-overlay {
     display: block;
     float: right;
@@ -80,6 +92,8 @@ $navheight: 5em;
 
   #docs-main-article {
     width: 100%;
+    margin: auto;
+    margin-top: $navheight;
   }
 }
 
@@ -95,8 +109,6 @@ $navheight: 5em;
   margin: 0 auto;
   padding: 0.5em;
   overflow-y: auto;
-
-  //background: var(--color-background);
 
   --pagefind-ui-scale: 0.9;
   --pagefind-ui-primary: #034ad8;
@@ -120,7 +132,7 @@ $navheight: 5em;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1010px) {
   #search {
     display: none;
   }
