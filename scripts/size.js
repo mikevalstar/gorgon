@@ -8,7 +8,6 @@ const fs = require('fs');
 const path = require('path');
 
 const distFolder = path.join(__dirname, '../library', 'dist');
-const distProviderFolder = path.join(__dirname, '../library', 'dist', 'provider');
 
 const sizeBadge = (size) => {
   let sizeColor = 'red';
@@ -36,14 +35,8 @@ const size = () => {
     const files = fs.readdirSync(distFolder, { withFileTypes: true });
     let size = 0;
     files.forEach(file => {
-      if (file.isFile() && file.name.endsWith('.js')) {
+      if (file.isFile() && file.name.endsWith('es.js')) {
         size += fs.statSync(path.join(distFolder, file.name)).size;
-      }
-    });
-    const filesProvider = fs.readdirSync(distProviderFolder, { withFileTypes: true });
-    filesProvider.forEach(file => {
-      if (file.isFile() && file.name.endsWith('.js')) {
-        size += fs.statSync(path.join(distProviderFolder, file.name)).size;
       }
     });
     return sizeBadge(size);
