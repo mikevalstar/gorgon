@@ -12,7 +12,7 @@ specifiers:
   vitest: ^0.25.0
 
 dependencies:
-  '@gorgonjs/gorgon': 1.2.0
+  '@gorgonjs/gorgon': link:../../library
 
 devDependencies:
   '@types/react': 18.0.25
@@ -389,11 +389,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /@gorgonjs/gorgon/1.2.0:
-    resolution: {integrity: sha512-BNQ5/UotJJHXw+BPUPvWi8PbjklN1/DfF88ovWC5KStSHZRx8q/fsxKsiYbQ8uymcEhMp7quAeR6Fbd7KYjKPQ==}
-    requiresBuild: true
-    dev: false
 
   /@humanwhocodes/config-array/0.11.7:
     resolution: {integrity: sha512-kBbPWzN8oVMLb0hOUYXhmxggL/1cJE6ydvjDIGi9EnAGUyA7cLVKQg+d/Dsm+KZwx2czGHrCmMVLiyg8s5JPKw==}

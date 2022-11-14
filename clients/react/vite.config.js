@@ -8,6 +8,7 @@ module.exports = defineConfig({
   build: {
     sourcemap: true,
     lib: {
+      type: ['es', 'cjs', 'umd'],
       entry: path.resolve(__dirname, 'index.ts'),
       name: 'Gorgon',
       fileName: format => `index.${format}.js`,
