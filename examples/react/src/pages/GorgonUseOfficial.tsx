@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGorgon } from '@gorgonjs/react';
 
 // This is your function you want to cache
