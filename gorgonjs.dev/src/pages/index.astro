@@ -9,7 +9,7 @@ const prismHTML = Prism.highlight(
   `import Gorgon from '@gorgonjs/gorgon';
 
 const getTODO = async (id: number) => {
-  const cachedValue = await Gorgon.get(\`todo/\${id}\`, async () => {
+  return await Gorgon.get(\`todo/\${id}\`, async () => {
     return fetch(\`https://jsonplaceholder.typicode.com/todos/\${id}\`)
       .then(response => response.json());
   }, 60 * 1000); // 1 minute
