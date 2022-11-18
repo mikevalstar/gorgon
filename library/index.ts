@@ -131,6 +131,13 @@ const Gorgon = (() => {
 
     },
 
+    // Clear all keys/values in the cache
+    clearAll: async(provider?: string) => {
+      var prov = gorgonCore.providers[provider || settings.defaultProvider];
+
+      return prov.clear();
+    },
+
     // Allows you to instantly overwite a cache object
     overwrite: async(key:string, asyncFunc: asyncFunction, policy?: GorgonPolicyInput) => {
 
