@@ -39,6 +39,15 @@ Because we store the items to disk and there are limitations to filenames on the
 
 A console log will be fired on a bad key being created, however it will still be stored. These keys will just be much harder to clear.
 
+### Data Serialization
+This provider uses JSON.stringify to serialize the data before storing it to disk. This means that any data that is not serializable will not be stored. This includes functions, classes, and circular references.
+
+To get some additional information on what is serializable and what is not, please refer to the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description).
+
+If you want to serialize something like Dates, Sets, Maps, etc. we recommend using a library like superjson to serialize the data before passing it to Gorgon.
+
+To reduce any buts that may come from inconsistent serialization we JSON.stringify the data before sending it back out of the cache.
+
 ### Write Failures
 
 In the event of write failure after initializing the provider was successful the provider will just return the cached item. There will be a log of this failure.
