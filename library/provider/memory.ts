@@ -5,7 +5,7 @@ interface IGorgonMemoryCacheProvider extends IGorgonCacheProvider {
 }
 
 // Created as a function to allow for multiple instances of the memory cache, if needed
-const MemoryCacheCreator = () =>{
+const MemoryCacheCreator = ():IGorgonMemoryCacheProvider =>{
 
   const cache = {};
   const hOP = cache.hasOwnProperty;
@@ -89,7 +89,7 @@ const MemoryCacheCreator = () =>{
       return false;
     },
 
-  } as IGorgonMemoryCacheProvider;
+  };
 
   return memoryCache;
 

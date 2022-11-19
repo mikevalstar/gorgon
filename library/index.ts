@@ -66,6 +66,8 @@ const Gorgon = (() => {
         outPolicy.expiry = incPolicy.expiry;
       }
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
+    } else if(typeof incPolicy === 'object' ) {
+      outPolicy.provider = incPolicy.provider || outPolicy.provider;
     } else if(typeof incPolicy === 'number'){
       outPolicy.expiry = incPolicy;
     }
@@ -129,6 +131,13 @@ const Gorgon = (() => {
       // Not a special clear
       return prov.clear(key);
 
+    },
+
+    // Clear all keys/values in the cache
+    clearAll: async(provider?: string) => {
+      var prov = gorgonCore.providers[provider || settings.defaultProvider];
+
+      return prov.clear();
     },
 
     // Allows you to instantly overwite a cache object
@@ -241,4 +250,5 @@ const Gorgon = (() => {
 
 })();
 
+export { MemoryCache };
 export default Gorgon;
