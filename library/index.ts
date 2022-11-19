@@ -66,6 +66,8 @@ const Gorgon = (() => {
         outPolicy.expiry = incPolicy.expiry;
       }
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
+    } else if(typeof incPolicy === 'object' ) {
+      outPolicy.provider = incPolicy.provider || outPolicy.provider;
     } else if(typeof incPolicy === 'number'){
       outPolicy.expiry = incPolicy;
     }
@@ -248,4 +250,5 @@ const Gorgon = (() => {
 
 })();
 
+export { MemoryCache };
 export default Gorgon;

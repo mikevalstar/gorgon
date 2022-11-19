@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2022-11-19
+
+### Updated
+- bumped the version number to keep it in line with the latest release of gorgon
+
 ## [1.3.1] - 2022-11-14
 
 ### Added

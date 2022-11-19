@@ -28,7 +28,7 @@ describe('File Provider', () => {
   it('clears the cache folder on init', async () => {
     const preexists = await fileExists( path.join(cachePath, 'test.json'));
     expect(preexists).toBe(true);
-    const fileCache = FileProvider(cachePath, {});
+    const fileCache = FileProvider(cachePath, {clearFolder: true});
     await fileCache.init();
     const exists = await fileExists( path.join(cachePath, 'test.text'));
     expect(exists).toBe(false);
@@ -37,7 +37,7 @@ describe('File Provider', () => {
   });
 
   it('saves some json to disk then can retreive it', async () => {
-    const fileCache = FileProvider(cachePath, {});
+    const fileCache = FileProvider(cachePath, {createSubfolder: true});
     await fileCache.init();
     await fileCache.set('test', {a:1}, {expiry: 1000, provider: ''});
 

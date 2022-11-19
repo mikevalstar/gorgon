@@ -32,29 +32,54 @@ export const fileExists = (filepath) => {
   });
 }
 
-// Wraps the Gorgon get method with a React hook
-export const FileProvider = (folder: string, options): IGorgonFileCacheProvider => {
+export type GorgonFileCacheProviderOptions = {
+  createSubfolder?: boolean;
+  clearFolder?: boolean;
+}
 
-  const _folder = path.resolve(folder);
+const defaultOptions:GorgonFileCacheProviderOptions = {
+  createSubfolder: false,
+  clearFolder: false,
+}
+
+// Wraps the Gorgon get method with a React hook
+export const FileProvider = (folder: string, options: GorgonFileCacheProviderOptions): IGorgonFileCacheProvider => {
+
+  const opts = {...defaultOptions, ...options};
+
+  let _folder = path.resolve(folder);
   const cacheTimers = {};
+
+  if(opts.createSubfolder) {
+    const date = new Date();
+    const randomNum = Math.floor(Math.random() * 1000000);
+    const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    _folder = path.join(_folder, `${dateStr}-${randomNum}`);
+
+    fs.promises.mkdir(_folder, {recursive: true});
+  }
 
   const fileCache = {
 
-    init: async() => {
-      try {
-        // delete all files and folders in the cache folder
-        const files = await fg(path.join(_folder,'**/*'), {cwd: '/', onlyFiles: true});
+    poop: true,
 
-        for (const file of files) {
-          await fs.promises.unlink(file);
+    init: async() => {
+      if(opts.clearFolder) {
+        try {
+          // delete all files and folders in the cache folder
+          const files = await fg(path.join(_folder,'**/*'), {cwd: '/', onlyFiles: true});
+
+          for (const file of files) {
+            await fs.promises.unlink(file);
+          }
+          const folders = await fg(path.join(_folder,'**/*'), {onlyDirectories: true});
+          for (const folder of folders.reverse()) {
+            await fs.promises.rmdir(folder);
+          }
+        } catch (error) {
+          throw new Error(`Error initializing file cache: ${error.message}`);
+          // we throw here becasue if we can't init the cache it will think any existing files are valid forever
         }
-        const folders = await fg(path.join(_folder,'**/*'), {onlyDirectories: true});
-        for (const folder of folders.reverse()) {
-          await fs.promises.rmdir(folder);
-        }
-      } catch (error) {
-        throw new Error(`Error initializing file cache: ${error.message}`);
-        // we throw here becasue if we can't init the cache it will think any existing files are valid forever
       }
 
       return;

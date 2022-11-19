@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@gorgonjs/gorgon': ^1.2.0
+  '@gorgonjs/gorgon': ^1.4.0
   '@types/react': ^18.0.25
   '@vitest/coverage-c8': ^0.25.0
   eslint: ^8.11.0
@@ -12,7 +12,7 @@ specifiers:
   vitest: ^0.25.0
 
 dependencies:
-  '@gorgonjs/gorgon': link:../../library
+  '@gorgonjs/gorgon': 1.4.0
 
 devDependencies:
   '@types/react': 18.0.25
@@ -389,6 +389,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@gorgonjs/gorgon/1.4.0:
+    resolution: {integrity: sha512-g5+XTLC/7AvIYmw0hjd6tCb8OAEt6hVgNqAGqloNugdE7WBYTwdj5WWcssni4UUH7b5NYE7MZEf6UzFaoFC+Cw==}
+    dev: false
 
   /@humanwhocodes/config-array/0.11.7:
     resolution: {integrity: sha512-kBbPWzN8oVMLb0hOUYXhmxggL/1cJE6ydvjDIGi9EnAGUyA7cLVKQg+d/Dsm+KZwx2czGHrCmMVLiyg8s5JPKw==}
