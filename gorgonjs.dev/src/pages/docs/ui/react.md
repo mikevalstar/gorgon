@@ -9,7 +9,7 @@ _[View examples on github](https://github.com/mikevalstar/gorgon/tree/main/examp
 
 With react you can often use the same components on different pages and you may reload those pages many times while the user is moving around your app or website. This will often mean that you either need to use Context or Redux to store your state. This is not always necessary and can be a bit of a hassle to setup. Gorgon provides a simple way to store your state in a global store that can be accessed from anywhere in your app.
 
-This allows you to [collocate](../collocation.md) your queries and mutations within your components and use them without having to worry about passing props around.
+This allows you to [collocate](/docs/collocation.md) your queries and mutations within your components and use them without having to worry about passing props around.
 
 Below we have:
 - [Official Package](#official-package)
