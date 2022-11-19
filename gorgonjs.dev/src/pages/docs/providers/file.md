@@ -44,7 +44,7 @@ This provider uses JSON.stringify to serialize the data before storing it to dis
 
 To get some additional information on what is serializable and what is not, please refer to the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description).
 
-If you want to serialize something like Dates, Sets, Maps, etc. we recommend using a library like superjson to serialize the data before passing it to Gorgon.
+If you want to serialize something like Dates, Sets, Maps, etc. we recommend using a library like [superjson](https://www.npmjs.com/package/superjson) to serialize the data before passing it to Gorgon.
 
 To reduce any buts that may come from inconsistent serialization we JSON.stringify the data before sending it back out of the cache.
 
