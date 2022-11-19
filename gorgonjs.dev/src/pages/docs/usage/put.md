@@ -10,13 +10,13 @@ Inserts an object into the cache
 ## key `string`
 A string representation of your cache key. 
 
-We recommend a format of `cachetype/{id}/{sub-id}` to assist when [clearing](./clear) the cache using wild cards
+We recommend a format of `cachetype/{id}/{sub-id}` to assist when [clearing](/docs/usage/clear) the cache using wild cards
 
 ## value `R`
 The value to store
 
 ## policy? `GorgonPolicyInput`
-_see [policies](./policies)_
+_see [policies](/docs/usage/policies)_
 
 Optionally pass in a Date, a number of ms or a GorgonPolicy to set an expiry for your cached object. If nothing is passed the result will be cached indefinitely. 
 
