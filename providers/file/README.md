@@ -1,6 +1,6 @@
 # Gorgon File Provider
 
-This library implements a fle storage provider to [@gorgonjs/gorgon](https://www.npmjs.com/package/@gorgonjs/gorgon), please refer to teh documentation on https://gorgonjs.dev for full documentation.
+This library implements a fle storage provider to [@gorgonjs/gorgon](https://www.npmjs.com/package/@gorgonjs/gorgon), please refer to the documentation on https://gorgonjs.dev for full documentation.
 
 ## Installation
 
