@@ -42,17 +42,18 @@ const { selected } = Astro.props;
       <li class={selected === 'usage-settings' ? 'selected' : ''}><a href="/docs/usage/settings">Settings</a></li>
     </ul>
   </li>
-  {/*<li>
+  <li>
     <summary>
       <h4>Server Usage</h4>
     </summary>
     <ul>
-      <li class={selected === 'server-basics' ? 'selected' : ''}><a href="/docs/server/basics">Basic Usage</a></li>
-      <li class={selected === 'server-astro' ? 'selected' : ''}><a href="/docs/server/astro">Astro</a></li>
+      {/*<li class={selected === 'server-basics' ? 'selected' : ''}><a href="/docs/server/basics">Basic Usage</a></li>*/}
+      <li class={selected === 'file-provider' ? 'selected' : ''}><a href="/docs/providers/file">File Caching</a></li>
+      {/*<li class={selected === 'server-astro' ? 'selected' : ''}><a href="/docs/server/astro">Astro</a></li>
       <li class={selected === 'server-prisma' ? 'selected' : ''}><a href="/docs/server/prisma">Prisma</a></li>
-      <li class={selected === 'server-examples' ? 'selected' : ''}><a href="/docs/servers/examples">Example Projects</a></li>
+    <li class={selected === 'server-examples' ? 'selected' : ''}><a href="/docs/servers/examples">Example Projects</a></li>*/}
     </ul>
-  </li>*/}
+  </li>
   <li>
     <summary>
       <h4>Frontend</h4>

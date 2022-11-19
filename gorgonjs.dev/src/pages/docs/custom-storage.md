@@ -32,3 +32,6 @@ import myProvider from './myAwesomeProvider';
 Gorgon.addProvider('my-awesome-provider', myProvider);
 Gorgon.settings({defaultProvider: 'my-awesome-provider'});
 ```
+## Providers
+
+- [File Provider](/docs/providers/file) - [@gorgonjs/file-provider](https://www.npmjs.com/package/@gorgonjs/file-provider)
