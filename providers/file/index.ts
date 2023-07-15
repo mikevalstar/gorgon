@@ -24,8 +24,8 @@ export const createValidPath = (path:string, ext?:string) => {
   return endSlash + (ext || '');;
 };
 
-export const fileExists = (filepath) => {
-  return new Promise((resolve, reject) => {
+export const fileExists = (filepath: string) => {
+  return new Promise((resolve) => {
     fs.access(filepath, fs.constants.F_OK, error => {
       resolve(!error);
     });
