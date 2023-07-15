@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^5.42.1",
+    "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-c8": "^0.25.0",
     "eslint": "^8.45.0",
     "jest": "^27.5.1",
