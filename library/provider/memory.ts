@@ -1,4 +1,4 @@
-import { IGorgonCacheProvider, GorgonPolicySanitized } from "../index";
+import {IGorgonCacheProvider, GorgonPolicySanitized} from '../index';
 
 interface IGorgonMemoryCacheProvider extends IGorgonCacheProvider {
   _clear: (key:string) => boolean;
@@ -19,7 +19,7 @@ const MemoryCacheCreator = ():IGorgonMemoryCacheProvider =>{
       return;
     },
 
-    get: async (key:string) => {
+    get: async(key:string) => {
 
       if (hOP.call(cache, key) && cache[key].val) {
       // The cached item exists, return it
@@ -60,7 +60,7 @@ const MemoryCacheCreator = ():IGorgonMemoryCacheProvider =>{
       return Object.keys(cache);
     },
 
-    clear: async (key?:string) => {
+    clear: async(key?:string) => {
 
     // Clears a single key or complete clear on empty
     // Clear all items in the cache

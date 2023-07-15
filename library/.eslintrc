@@ -272,5 +272,7 @@
     "requireConfigFile": false,
     "sourceType": "module",
     "ecmaVersion": 12
-  }
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"]
 }
