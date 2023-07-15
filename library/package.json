@@ -1,6 +1,6 @@
 {
   "name": "@gorgonjs/gorgon",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A simple caching library for async functions",
   "homepage": "https://gorgonjs.dev",
   "main": "./dist/index.umd.js",
@@ -41,9 +41,9 @@
     "eslint": "^8.45.0",
     "jest": "^27.5.1",
     "typescript": "^5.1.6",
-    "vite": "^3.2.3",
-    "vite-plugin-dts": "^1.7.0",
-    "vitest": "^0.25.0"
+    "vite": "^4.4.4",
+    "vite-plugin-dts": "^3.3.0",
+    "vitest": "^0.33.0"
   },
   "jest": {
     "collectCoverage": true,
