@@ -56,24 +56,25 @@ const Gorgon = (() => {
     }
 
     // Type is a full policy object
-    if(incPolicy instanceof Date){
+    if(incPolicy instanceof Date) {
       var d = new Date();
+
       outPolicy.expiry = Math.ceil((incPolicy.getTime() - d.getTime()) / 1000);
     }else if (typeof incPolicy === 'object' && incPolicy.expiry) {
-      if(incPolicy.expiry instanceof Date){
+      if(incPolicy.expiry instanceof Date) {
         outPolicy.expiry = Math.ceil((incPolicy.expiry.getTime() - d.getTime()) / 1000);
       }else{
         outPolicy.expiry = incPolicy.expiry;
       }
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
-    } else if(typeof incPolicy === 'object' ) {
+    } else if(typeof incPolicy === 'object') {
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
-    } else if(typeof incPolicy === 'number'){
+    } else if(typeof incPolicy === 'number') {
       outPolicy.expiry = incPolicy;
     }
 
     // Number is too small, negative or not a number
-    outPolicy.expiry = outPolicy.expiry > 0 ? outPolicy.expiry : false;
+    outPolicy.expiry = outPolicy.expiry && outPolicy.expiry > 0 ? outPolicy.expiry : false;
 
     return outPolicy;
   };
@@ -165,7 +166,7 @@ const Gorgon = (() => {
 
       // If we have a current value sent it out; cache hit!
       if(currentVal !== undefined) {
-        if(settings.debug) console.info('[Gorgon] Cache hit for key: ' + key, currentVal);
+        if(settings.debug) {console.info('[Gorgon] Cache hit for key: ' + key, currentVal);}
         return currentVal;
       }
 
@@ -182,7 +183,7 @@ const Gorgon = (() => {
 
         // Add to the current queue
         if(!oldQueue) {
-          if(settings.debug) console.info('[Gorgon] Cache miss, in progress, adding to current queue for key: ' + key);
+          if(settings.debug) {console.info('[Gorgon] Cache miss, in progress, adding to current queue for key: ' + key);}
 
           var concurent = new Promise(function(resolve: (value: R) => void, reject) {
             currentTasks[key].push({
@@ -200,19 +201,19 @@ const Gorgon = (() => {
       }
 
       try{
-        if(settings.debug) console.info('[Gorgon] Cache miss, resolving item for: ' + key);
+        if(settings.debug) {console.info('[Gorgon] Cache miss, resolving item for: ' + key);}
 
         // This is the primary item, lets resolve and push it out
         const resolvedData = await asyncFunc();
 
-        if(settings.debug) console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);
+        if(settings.debug) {console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);}
 
-        let val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
+        const val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
 
         if (hOP.call(currentTasks, key)) {
           for (var i in currentTasks[key]) {
             if(currentTasks[key][i].res) {
-              if(settings.debug) console.info('[Gorgon] Cache queue resolved for: ' + key, resolvedData);
+              if(settings.debug) {console.info('[Gorgon] Cache queue resolved for: ' + key, resolvedData);}
 
               currentTasks[key][i].res(val);
             }
@@ -250,5 +251,5 @@ const Gorgon = (() => {
 
 })();
 
-export { MemoryCache };
+export {MemoryCache};
 export default Gorgon;
