@@ -122,12 +122,25 @@ const Gorgon = (() => {
       return settings;
     },
 
+    // add a hook or array of hooks
+    addHook: (key: GorgonHookKey, hook: GorgonHook | Array<GorgonHook>) => {
+      if (!hOP.call(gorgonCore.hooks, key)) {
+        gorgonCore.hooks[key] = [];
+      }
+
+      if (Array.isArray(hook)) {
+        gorgonCore.hooks[key] = gorgonCore.hooks[key].concat(hook);
+      } else {
+        gorgonCore.hooks[key].push(hook);
+      }
+    },
+
     // Add a provider
     addProvider: (name: string, provider: IGorgonCacheProvider) => {
       provider.init(); // Trigger for provider to clear any old cache items or any other cleanup
       gorgonCore.providers[name] = provider;
 
-      gorgonCore._callHooks('addProvider', name, provider);
+      gorgonCore._callHooks('addProvider', { name, provider });
     },
 
     // Place an item into the cache
@@ -247,12 +260,12 @@ const Gorgon = (() => {
         }
 
         // This is the primary item
-        const resolvedData = asyncFunc();
+        const resolver = asyncFunc();
 
-        gorgonCore._callHooks('get', { key, asyncFunc, policy, cacheHit: false, queued: false }, resolvedData);
+        gorgonCore._callHooks('get', { key, asyncFunc, policy, cacheHit: false, queued: false }, resolver);
 
         // wait for it to finish then push it out
-        await resolvedData;
+        const resolvedData = await resolver;
 
         if (settings.debug) {
           console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);
