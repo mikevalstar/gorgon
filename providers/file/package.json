@@ -1,6 +1,6 @@
 {
   "name": "@gorgonjs/file-provider",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "A simple file caching provider for Gorgon JS",
   "homepage": "https://gorgonjs.dev",
   "main": "dist/index.umd.js",
