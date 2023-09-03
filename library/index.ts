@@ -1,16 +1,18 @@
 import MemoryCache from './provider/memory';
 
 export type asyncFunction = () => Promise<any> | (() => any);
+export type GorgonHookKey = 'put' | 'clear' | 'clearAll' | 'overwrite' | 'get';
+export type GorgonHook = (key: GorgonHookKey, input?: any, output?: any) => void;
 export type GorgonSettings = {
   debug: boolean;
   defaultProvider: string;
   retry: number;
-}
+};
 export type GorgonSettingsInput = {
   debug?: boolean;
   defaultProvider?: string;
   retry?: number;
-}
+};
 export type GorgonPolicy = {
   expiry: number | Date | false;
   provider: string;
@@ -34,8 +36,7 @@ export interface IGorgonCacheProvider {
 }
 
 const Gorgon = (() => {
-
-  const currentTasks = {} as {[key: string]: GorgonCurrentTaskItem};
+  const currentTasks = {} as { [key: string]: GorgonCurrentTaskItem };
   const hOP = currentTasks.hasOwnProperty;
 
   const settings = {
@@ -44,7 +45,7 @@ const Gorgon = (() => {
     retry: 5000,
   } as GorgonSettings;
 
-  const policyMaker = function(incPolicy?: GorgonPolicyInput) {
+  const policyMaker = function (incPolicy?: GorgonPolicyInput) {
     const outPolicy = {
       expiry: false,
       provider: settings.defaultProvider,
@@ -56,20 +57,20 @@ const Gorgon = (() => {
     }
 
     // Type is a full policy object
-    if(incPolicy instanceof Date) {
+    if (incPolicy instanceof Date) {
       var d = new Date();
 
       outPolicy.expiry = Math.ceil((incPolicy.getTime() - d.getTime()) / 1000);
-    }else if (typeof incPolicy === 'object' && incPolicy.expiry) {
-      if(incPolicy.expiry instanceof Date) {
+    } else if (typeof incPolicy === 'object' && incPolicy.expiry) {
+      if (incPolicy.expiry instanceof Date) {
         outPolicy.expiry = Math.ceil((incPolicy.expiry.getTime() - d.getTime()) / 1000);
-      }else{
+      } else {
         outPolicy.expiry = incPolicy.expiry;
       }
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
-    } else if(typeof incPolicy === 'object') {
+    } else if (typeof incPolicy === 'object') {
       outPolicy.provider = incPolicy.provider || outPolicy.provider;
-    } else if(typeof incPolicy === 'number') {
+    } else if (typeof incPolicy === 'number') {
       outPolicy.expiry = incPolicy;
     }
 
@@ -80,9 +81,11 @@ const Gorgon = (() => {
   };
 
   const gorgonCore = {
-
     // Providers available for use
-    providers: {} as {[key: string]: IGorgonCacheProvider},
+    providers: {} as { [key: string]: IGorgonCacheProvider },
+
+    // Hooks
+    hooks: {} as { [key: string]: Array<() => void> },
 
     // Allows for settings on the gorgon cache
     settings: (newSettings?: GorgonSettingsInput) => {
@@ -96,28 +99,27 @@ const Gorgon = (() => {
     },
 
     // Add a provider
-    addProvider: (name: string, provider:IGorgonCacheProvider) => {
+    addProvider: (name: string, provider: IGorgonCacheProvider) => {
       provider.init(); // Trigger for provider to clear any old cache items or any other cleanup
       gorgonCore.providers[name] = provider;
     },
 
     // Place an item into the cache
-    put: async<R>(key:string, value:R, policy?: GorgonPolicyInput):Promise<R> => {
+    put: async <R>(key: string, value: R, policy?: GorgonPolicyInput): Promise<R> => {
       policy = policyMaker(policy);
       var prov = gorgonCore.providers[policy.provider];
 
       return prov.set(key, value, policyMaker(policy));
     },
 
-        // Clear one or all items in the cache
-    clear: async(key: string, provider?: string) => {
-
+    // Clear one or all items in the cache
+    clear: async (key: string, provider?: string) => {
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
 
       // Clear a wildcard search of objects
       if (key && key.indexOf('*') > -1) {
-        return prov.keys().then(function(keys) {
-          var cacheMatchKeys = keys.filter(function(str) {
+        return prov.keys().then(function (keys) {
+          var cacheMatchKeys = keys.filter(function (str) {
             return new RegExp('^' + key.split('*').join('.*') + '$').test(str);
           });
 
@@ -131,42 +133,40 @@ const Gorgon = (() => {
 
       // Not a special clear
       return prov.clear(key);
-
     },
 
     // Clear all keys/values in the cache
-    clearAll: async(provider?: string) => {
+    clearAll: async (provider?: string) => {
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
 
       return prov.clear();
     },
 
     // Allows you to instantly overwite a cache object
-    overwrite: async(key:string, asyncFunc: asyncFunction, policy?: GorgonPolicyInput) => {
-
-      try{
+    overwrite: async (key: string, asyncFunc: asyncFunction, policy?: GorgonPolicyInput) => {
+      try {
         const resolvedData = await asyncFunc();
 
         const val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
 
         return val;
-      }catch (e) {
+      } catch (e) {
         throw e;
       }
-
     },
 
     // Allows you to get from the cache or pull from the promise
-    get: async<R>(key:string, asyncFunc:() => R, policy?: GorgonPolicyInput):Promise<R> => {
-
+    get: async <R>(key: string, asyncFunc: () => R, policy?: GorgonPolicyInput): Promise<R> => {
       policy = policyMaker(policy);
       const prov = gorgonCore.providers[policy.provider];
 
       const currentVal = await prov.get(key); // Most providers will only lookup by key and return false on not found
 
       // If we have a current value sent it out; cache hit!
-      if(currentVal !== undefined) {
-        if(settings.debug) {console.info('[Gorgon] Cache hit for key: ' + key, currentVal);}
+      if (currentVal !== undefined) {
+        if (settings.debug) {
+          console.info('[Gorgon] Cache hit for key: ' + key, currentVal);
+        }
         return currentVal;
       }
 
@@ -176,16 +176,18 @@ const Gorgon = (() => {
         var oldQueue = false;
 
         for (var i in currentTasks[key]) {
-          if(currentTasks[key][i].queued < new Date(Date.now() - settings.retry)) {
+          if (currentTasks[key][i].queued < new Date(Date.now() - settings.retry)) {
             oldQueue = true;
           }
         }
 
         // Add to the current queue
-        if(!oldQueue) {
-          if(settings.debug) {console.info('[Gorgon] Cache miss, in progress, adding to current queue for key: ' + key);}
+        if (!oldQueue) {
+          if (settings.debug) {
+            console.info('[Gorgon] Cache miss, in progress, adding to current queue for key: ' + key);
+          }
 
-          var concurent = new Promise(function(resolve: (value: R) => void, reject) {
+          var concurent = new Promise(function (resolve: (value: R) => void, reject) {
             currentTasks[key].push({
               res: resolve,
               rej: reject,
@@ -195,25 +197,31 @@ const Gorgon = (() => {
 
           return concurent;
         }
-      }else{
+      } else {
         // Add current task to list, this is the first one so the primary
-        currentTasks[key] = [{queued: new Date()}];
+        currentTasks[key] = [{ queued: new Date() }];
       }
 
-      try{
-        if(settings.debug) {console.info('[Gorgon] Cache miss, resolving item for: ' + key);}
+      try {
+        if (settings.debug) {
+          console.info('[Gorgon] Cache miss, resolving item for: ' + key);
+        }
 
         // This is the primary item, lets resolve and push it out
         const resolvedData = await asyncFunc();
 
-        if(settings.debug) {console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);}
+        if (settings.debug) {
+          console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);
+        }
 
         const val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
 
         if (hOP.call(currentTasks, key)) {
           for (var i in currentTasks[key]) {
-            if(currentTasks[key][i].res) {
-              if(settings.debug) {console.info('[Gorgon] Cache queue resolved for: ' + key, resolvedData);}
+            if (currentTasks[key][i].res) {
+              if (settings.debug) {
+                console.info('[Gorgon] Cache queue resolved for: ' + key, resolvedData);
+              }
 
               currentTasks[key][i].res(val);
             }
@@ -224,11 +232,10 @@ const Gorgon = (() => {
         }
 
         return val;
-
-      }catch (e) {
+      } catch (e) {
         if (hOP.call(currentTasks, key)) {
           for (var i in currentTasks[key]) {
-            if(currentTasks[key][i].rej) {
+            if (currentTasks[key][i].rej) {
               currentTasks[key][i].rej(e);
             }
           }
@@ -239,17 +246,13 @@ const Gorgon = (() => {
 
         throw e;
       }
-
     },
-
-
   };
 
   gorgonCore.addProvider('memory', MemoryCache()); // Default provider, light weight and simple
 
   return gorgonCore;
-
 })();
 
-export {MemoryCache};
+export { MemoryCache };
 export default Gorgon;
