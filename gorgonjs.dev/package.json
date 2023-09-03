@@ -7,17 +7,17 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build; npx -y pagefind --source dist",
-    "build:preview" : "astro build; npx -y pagefind --source dist --serve",
+    "build:preview": "astro build; npx -y pagefind --source dist --serve",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/prism": "1.0.2",
-    "astro": "^1.6.7",
+    "@astrojs/prism": "3.0.0",
+    "astro": "^3.0.7",
     "prismjs": "^1.29.0"
   },
   "devDependencies": {
-    "@astrojs/sitemap": "^1.0.0",
+    "@astrojs/sitemap": "^3.0.0",
     "@typescript-eslint/parser": "^5.42.1",
     "eslint": "^8.27.0",
     "eslint-plugin-astro": "^0.21.0",
