@@ -1,7 +1,15 @@
 import MemoryCache from './provider/memory';
 
 export type asyncFunction = () => Promise<any> | (() => any);
-export type GorgonHookKey = 'put' | 'clear' | 'clearAll' | 'overwrite' | 'get';
+export type GorgonHookKey =
+  | 'settings'
+  | 'addProvider'
+  | 'put'
+  | 'clear'
+  | 'clearAll'
+  | 'overwrite'
+  | 'get'
+  | 'valueError';
 export type GorgonHook = (key: GorgonHookKey, input?: any, output?: any) => void;
 export type GorgonSettings = {
   debug: boolean;
@@ -85,7 +93,21 @@ const Gorgon = (() => {
     providers: {} as { [key: string]: IGorgonCacheProvider },
 
     // Hooks
-    hooks: {} as { [key: string]: Array<() => void> },
+    hooks: {} as { [key: string]: Array<GorgonHook> },
+
+    _callHooks: (key: GorgonHookKey, input?: any, output?: any) => {
+      if (hOP.call(gorgonCore.hooks, key)) {
+        for (var i in gorgonCore.hooks[key]) {
+          if (typeof gorgonCore.hooks[key][i] === 'function') {
+            try {
+              gorgonCore.hooks[key][i](key, input, output);
+            } catch (e) {
+              console.error('[Gorgon] Hook error for hook: ' + key, e);
+            }
+          }
+        }
+      }
+    },
 
     // Allows for settings on the gorgon cache
     settings: (newSettings?: GorgonSettingsInput) => {
@@ -95,6 +117,8 @@ const Gorgon = (() => {
 
       Object.assign(settings, newSettings); // only overwrite ones sent in; keep others at existing
 
+      gorgonCore._callHooks('settings', newSettings, settings);
+
       return settings;
     },
 
@@ -102,6 +126,8 @@ const Gorgon = (() => {
     addProvider: (name: string, provider: IGorgonCacheProvider) => {
       provider.init(); // Trigger for provider to clear any old cache items or any other cleanup
       gorgonCore.providers[name] = provider;
+
+      gorgonCore._callHooks('addProvider', name, provider);
     },
 
     // Place an item into the cache
@@ -109,12 +135,16 @@ const Gorgon = (() => {
       policy = policyMaker(policy);
       var prov = gorgonCore.providers[policy.provider];
 
+      gorgonCore._callHooks('put', { key, value, policy }, value);
+
       return prov.set(key, value, policyMaker(policy));
     },
 
     // Clear one or all items in the cache
     clear: async (key: string, provider?: string) => {
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
+
+      gorgonCore._callHooks('clear', { key, provider });
 
       // Clear a wildcard search of objects
       if (key && key.indexOf('*') > -1) {
@@ -139,6 +169,8 @@ const Gorgon = (() => {
     clearAll: async (provider?: string) => {
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
 
+      gorgonCore._callHooks('clearAll', { provider });
+
       return prov.clear();
     },
 
@@ -148,6 +180,8 @@ const Gorgon = (() => {
         const resolvedData = await asyncFunc();
 
         const val = await gorgonCore.put(key, resolvedData, policyMaker(policy));
+
+        gorgonCore._callHooks('overwrite', { key, asyncFunc, policy }, val);
 
         return val;
       } catch (e) {
@@ -167,6 +201,9 @@ const Gorgon = (() => {
         if (settings.debug) {
           console.info('[Gorgon] Cache hit for key: ' + key, currentVal);
         }
+
+        gorgonCore._callHooks('get', { key, asyncFunc, policy, cacheHit: true, queued: false }, currentVal);
+
         return currentVal;
       }
 
@@ -195,6 +232,8 @@ const Gorgon = (() => {
             });
           });
 
+          gorgonCore._callHooks('get', { key, asyncFunc, policy, cacheHit: false, queued: true }, concurent);
+
           return concurent;
         }
       } else {
@@ -207,8 +246,13 @@ const Gorgon = (() => {
           console.info('[Gorgon] Cache miss, resolving item for: ' + key);
         }
 
-        // This is the primary item, lets resolve and push it out
-        const resolvedData = await asyncFunc();
+        // This is the primary item
+        const resolvedData = asyncFunc();
+
+        gorgonCore._callHooks('get', { key, asyncFunc, policy, cacheHit: false, queued: false }, resolvedData);
+
+        // wait for it to finish then push it out
+        await resolvedData;
 
         if (settings.debug) {
           console.info('[Gorgon] Cache resolved, resolved item for: ' + key, resolvedData);
@@ -239,6 +283,8 @@ const Gorgon = (() => {
               currentTasks[key][i].rej(e);
             }
           }
+
+          gorgonCore._callHooks('valueError', { key, asyncFunc, policy, cacheHit: false, queued: false }, e);
 
           currentTasks[key] = [];
           delete currentTasks[key];
