@@ -1,19 +1,17 @@
 import { describe, it, expect, vi } from 'vitest';
 import Gorgon from '../index';
 
-Gorgon.settings({retry: 10});
+Gorgon.settings({ retry: 10 });
 
 vi.useRealTimers();
 
 describe('concurrency', () => {
-
-  it('Only calls the function once, when the call is slow', async() => {
-
+  it('Only calls the function once, when the call is slow', async () => {
     let calledCount = 0;
 
-    const incrementor = async() => {
+    const incrementor = async () => {
       return new Promise((resolve: (value: boolean) => void) => {
-        setTimeout(()=> {
+        setTimeout(() => {
           calledCount += 1;
           resolve(true);
         }, 200);
@@ -24,33 +22,29 @@ describe('concurrency', () => {
     const res2 = await Gorgon.get('concur1', incrementor, 50);
 
     return expect(calledCount).toEqual(1);
-
   });
 
-  it('Only calls the function once, but rejects both', async() => {
-
+  it('Only calls the function once, but rejects both', async () => {
     let calledCount = 0;
 
-    const incrementor = async() => {
+    const incrementor = async () => {
       return new Promise((resolve, rej) => {
-        setTimeout(()=> {
+        setTimeout(() => {
           calledCount += 1;
           rej(true);
         }, 200);
       });
     };
 
-    try{
-      const res = Gorgon.get('concur2', incrementor, 50).catch(e => {
+    try {
+      const res = Gorgon.get('concur2', incrementor, 50).catch((e) => {
         // error
       });
       const res2 = await Gorgon.get('concur2', incrementor, 50);
-    }catch(e) {
+    } catch (e) {
       // error?
     }
 
     return expect(calledCount).toEqual(1);
-
   });
-
 });

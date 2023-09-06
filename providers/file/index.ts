@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import fg from 'fast-glob';
-import Gorgon, {IGorgonCacheProvider, GorgonPolicySanitized} from '@gorgonjs/gorgon';
+import Gorgon, { IGorgonCacheProvider, GorgonPolicySanitized } from '@gorgonjs/gorgon';
 
 interface IGorgonFileCacheProvider extends IGorgonCacheProvider {
-  _clear: (key:string) => Promise<boolean>;
+  _clear: (key: string) => Promise<boolean>;
 }
 
 // checks if a string is a valid path and does not go up directories
-export const createValidPath = (path:string, ext?:string) => {
+export const createValidPath = (path: string, ext?: string) => {
   // regesx for all not alphanumeric characters
   const reg = /[^a-zA-Z0-9\_\-\/]/g;
   const alphaonly = path.replaceAll(reg, '_');
@@ -17,62 +17,62 @@ export const createValidPath = (path:string, ext?:string) => {
   // end the string with "empty" if it ends in a /
   const endSlash = singleSlash.replace(/\/$/, '/empty');
 
-  if(endSlash !== path) {
-    console.warn(`Path ${path} was changed to ${endSlash} this may indicate a bad cache key or someone attempting to access files outside of the cache directory`);
+  if (endSlash !== path) {
+    console.warn(
+      `Path ${path} was changed to ${endSlash} this may indicate a bad cache key or someone attempting to access files outside of the cache directory`,
+    );
   }
 
-  return endSlash + (ext || '');;
+  return endSlash + (ext || '');
 };
 
 export const fileExists = (filepath: string) => {
   return new Promise((resolve) => {
-    fs.access(filepath, fs.constants.F_OK, error => {
+    fs.access(filepath, fs.constants.F_OK, (error) => {
       resolve(!error);
     });
   });
-}
+};
 
 export type GorgonFileCacheProviderOptions = {
   createSubfolder?: boolean;
   clearFolder?: boolean;
-}
+};
 
-const defaultOptions:GorgonFileCacheProviderOptions = {
+const defaultOptions: GorgonFileCacheProviderOptions = {
   createSubfolder: false,
   clearFolder: false,
-}
+};
 
 // Wraps the Gorgon get method with a React hook
 export const FileProvider = (folder: string, options: GorgonFileCacheProviderOptions): IGorgonFileCacheProvider => {
-
-  const opts = {...defaultOptions, ...options};
+  const opts = { ...defaultOptions, ...options };
 
   let _folder = path.resolve(folder);
   const cacheTimers = {};
 
-  if(opts.createSubfolder) {
+  if (opts.createSubfolder) {
     const date = new Date();
     const randomNum = Math.floor(Math.random() * 1000000);
     const dateStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     _folder = path.join(_folder, `${dateStr}-${randomNum}`);
 
-    fs.promises.mkdir(_folder, {recursive: true});
+    fs.promises.mkdir(_folder, { recursive: true });
   }
 
   const fileCache = {
-
     poop: true,
 
-    init: async() => {
-      if(opts.clearFolder) {
+    init: async () => {
+      if (opts.clearFolder) {
         try {
           // delete all files and folders in the cache folder
-          const files = await fg(path.join(_folder,'**/*'), {cwd: '/', onlyFiles: true});
+          const files = await fg(path.join(_folder, '**/*'), { cwd: '/', onlyFiles: true });
 
           for (const file of files) {
             await fs.promises.unlink(file);
           }
-          const folders = await fg(path.join(_folder,'**/*'), {onlyDirectories: true});
+          const folders = await fg(path.join(_folder, '**/*'), { onlyDirectories: true });
           for (const folder of folders.reverse()) {
             await fs.promises.rmdir(folder);
           }
@@ -85,10 +85,10 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
       return;
     },
 
-    get: async (key:string) => {
+    get: async (key: string) => {
       const pathFile = createValidPath(key, '.json');
 
-      try{
+      try {
         // check if the file exists
         const exists = await fileExists(path.join(_folder, pathFile));
         if (!exists) {
@@ -105,13 +105,13 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
       }
     },
 
-    set: async(key:string, value:any, policy: GorgonPolicySanitized) => {
+    set: async (key: string, value: any, policy: GorgonPolicySanitized) => {
       try {
         // checks that the value is serializable
         let json = null as string | null;
-        if(value.toJSON){
+        if (value.toJSON) {
           json = value.toJSON();
-        }else{
+        } else {
           json = JSON.stringify(value);
         }
 
@@ -119,8 +119,8 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
         const pathFile = createValidPath(key, '.json');
 
         // write the file creating the folder if needed
-        await fs.promises.mkdir(path.join(_folder, path.dirname(pathFile)), {recursive: true});
-        await fs.promises.writeFile(path.join(_folder, pathFile), json, {encoding: 'utf8'});
+        await fs.promises.mkdir(path.join(_folder, path.dirname(pathFile)), { recursive: true });
+        await fs.promises.writeFile(path.join(_folder, pathFile), json, { encoding: 'utf8' });
 
         if (policy && policy.expiry && policy.expiry > 0) {
           // clear any existing timer
@@ -128,7 +128,7 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
             clearTimeout(cacheTimers[pathTimer]);
           }
 
-          const to = setTimeout(function() {
+          const to = setTimeout(function () {
             fileCache.clear(pathTimer);
           }, policy.expiry);
 
@@ -142,14 +142,13 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
       }
     },
 
-    keys: async() => {
+    keys: async () => {
       const files = await fg(path.join('**/*'), { cwd: _folder, onlyFiles: true });
       return files.map((file) => file.replace(/\.json$/, ''));
     },
 
-    clear: async(key?:string) => {
-
-      if(!key){
+    clear: async (key?: string) => {
+      if (!key) {
         const keys = await fileCache.keys();
         const proms = keys.map((key) => fileCache._clear(key));
         const results = await Promise.all(proms);
@@ -159,7 +158,7 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
       return fileCache._clear(key);
     },
 
-    _clear: async (key:string) => {
+    _clear: async (key: string) => {
       const pathTimer = createValidPath(key, '');
       const pathFile = createValidPath(key, '.json');
 
@@ -178,9 +177,7 @@ export const FileProvider = (folder: string, options: GorgonFileCacheProviderOpt
 
       return true;
     },
-
   };
 
   return fileCache;
-
-}
+};
