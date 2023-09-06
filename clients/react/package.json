@@ -52,6 +52,6 @@
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@gorgonjs/gorgon": "^1.4.0"
+    "@gorgonjs/gorgon": "^1.5.0"
   }
 }

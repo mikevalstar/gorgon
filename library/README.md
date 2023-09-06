@@ -1,7 +1,7 @@
 # Gorgon
 ![coverage](https://img.shields.io/badge/coverage-97%25-brightgreen)
-![size](https://img.shields.io/badge/size-4.03KB-brightgreen)
-![version](https://img.shields.io/badge/version-1.4.0-blue)
+![size](https://img.shields.io/badge/size-5.67KB-brightgreen)
+![version](https://img.shields.io/badge/version-1.5.0-blue)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
 A typescript async based caching library for node or the browser.
