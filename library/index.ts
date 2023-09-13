@@ -154,10 +154,10 @@ const Gorgon = (() => {
     },
 
     // Clear one or all items in the cache
-    clear: async (key: string, provider?: string) => {
+    clear: async (key: string, provider?: string, hookIdentifier?: string) => {
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
 
-      gorgonCore._callHooks('clear', { key, provider });
+      gorgonCore._callHooks('clear', { key, provider, identifier: hookIdentifier });
 
       // Clear a wildcard search of objects
       if (key && key.indexOf('*') > -1) {
@@ -179,10 +179,10 @@ const Gorgon = (() => {
     },
 
     // Clear all keys/values in the cache
-    clearAll: async (provider?: string) => {
+    clearAll: async (provider?: string, hookIdentifier?: string) => {
       var prov = gorgonCore.providers[provider || settings.defaultProvider];
 
-      gorgonCore._callHooks('clearAll', { provider });
+      gorgonCore._callHooks('clearAll', { provider, identifier: hookIdentifier });
 
       return prov.clear();
     },

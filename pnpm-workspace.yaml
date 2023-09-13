@@ -1,7 +1,7 @@
-
 packages:
   - 'clients/*'
   - 'examples/*'
   - 'gorgonjs.dev'
   - 'library'
   - 'providers/*'
+  - 'plugins/*'

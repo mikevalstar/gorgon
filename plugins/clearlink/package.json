@@ -1,0 +1,57 @@
+{
+  "name": "@gorgonjs/clearlink",
+  "version": "1.5.0",
+  "description": "A simple system cache clearing for Gorgon JS",
+  "homepage": "https://gorgonjs.dev",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "build": "vite build",
+    "prepublish": "vite build",
+    "tscheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mikevalstar/gorgon.git"
+  },
+  "keywords": [
+    "cache",
+    "promise",
+    "async",
+    "typescript",
+    "bridge"
+  ],
+  "author": "Mike Valstar <mike@valstar.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikevalstar/gorgon/issues"
+  },
+  "devDependencies": {
+    "@gorgonjs/gorgon": "^1.5.0",
+    "@types/node": "^18.11.9",
+    "@types/ws": "^8.5.5",
+    "@vitest/coverage-c8": "^0.25.0",
+    "eslint": "^8.11.0",
+    "jest": "^27.5.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.4",
+    "vite-plugin-dts": "^3.3.0",
+    "vitest": "^0.33.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "timers": "fake"
+  },
+  "dependencies": {
+    "ws": "^8.14.1"
+  }
+}
