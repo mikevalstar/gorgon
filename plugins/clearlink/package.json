@@ -1,6 +1,6 @@
 {
   "name": "@gorgonjs/clearlink",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A simple system cache clearing for Gorgon JS",
   "homepage": "https://gorgonjs.dev",
   "main": "dist/index.umd.js",
