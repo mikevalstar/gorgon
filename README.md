@@ -19,12 +19,15 @@ npm install @gorgonjs/gorgon
 Having trouble? [join our discord](https://discord.gg/54Z2GscCJr)
 
 ## Directory
-| Package | Version |
-|---------|---------|
-|@gorgonjs/gorgon|![gorgon version](https://img.shields.io/npm/v/@gorgonjs/gorgon.svg?label=%20)|
-|@gorgonjs/react|![gorgon react version](https://img.shields.io/npm/v/@gorgonjs/react.svg?label=%20)|
-|@gorgonjs/file-provider|![gorgon file provider](https://img.shields.io/npm/v/@gorgonjs/file-provider.svg?label=%20)|
+
+| Package                 | Version                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------------- |
+| @gorgonjs/gorgon        | ![gorgon version](https://img.shields.io/npm/v/@gorgonjs/gorgon.svg?label=%20)              |
+| @gorgonjs/react         | ![gorgon react version](https://img.shields.io/npm/v/@gorgonjs/react.svg?label=%20)         |
+| @gorgonjs/file-provider | ![gorgon file provider](https://img.shields.io/npm/v/@gorgonjs/file-provider.svg?label=%20) |
+| @gorgonjs/clearlink     | ![gorgon clear link](https://img.shields.io/npm/v/@gorgonjs/clearlink.svg?label=%20)        |
 
 ## Links
+
 - [Official website](http://gorgonjs.dev)
 - [MIT license]('./LICENSE)
