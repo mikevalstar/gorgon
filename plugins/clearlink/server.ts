@@ -11,6 +11,7 @@ const server = {
         console.log('received: %s', data);
 
         wss.clients.forEach(function each(client) {
+          // Send to all open connections except itself
           if (client.readyState === WebSocket.OPEN && client !== ws) {
             client.send(data);
           }
