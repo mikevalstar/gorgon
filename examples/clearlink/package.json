@@ -1,0 +1,21 @@
+{
+  "name": "clearlink-example",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "server1": "ts-node server1.ts",
+    "server2": "ts-node server2.ts",
+    "linkserver": "ts-node linkserver.ts"
+  },
+  "dependencies": {
+    "@gorgonjs/clearlink": "workspace:*",
+    "@gorgonjs/gorgon": "workspace:*",
+    "ts-node": "^10.9.1",
+    "ws": "^8.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "tslib": "^2.6.2",
+    "typescript": "^4.6.4"
+  }
+}

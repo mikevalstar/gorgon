@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["es2022"],
+    "module": "Node16",
+    "outDir": "dist",
+    "declaration": true,
+    "esModuleInterop": true
+  },
+  "include": ["index.ts"]
+}
