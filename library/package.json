@@ -29,11 +29,17 @@
     "type": "git",
     "url": "git@github.com:mikevalstar/gorgon.git"
   },
+  "files": [
+    "dist",
+    "skills",
+    "!skills/_artifacts"
+  ],
   "keywords": [
     "cache",
     "promise",
     "async",
-    "typescript"
+    "typescript",
+    "tanstack-intent"
   ],
   "author": "Mike Valstar <mike@valstar.dev>",
   "license": "MIT",
@@ -50,7 +56,8 @@
     "typescript": "^5.1.6",
     "vite": "^4.4.4",
     "vite-plugin-dts": "^3.3.0",
-    "vitest": "^0.33.0"
+    "vitest": "^0.33.0",
+    "@tanstack/intent": "^0.0.23"
   },
   "jest": {
     "collectCoverage": true,

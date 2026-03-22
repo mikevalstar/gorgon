@@ -113,7 +113,7 @@ Gorgon.get('key', fn, 60000);
 // Date object
 Gorgon.get('key', fn, new Date('2026-12-31'));
 
-// Cache forever
+// Cache forever (use with caution — see Common Mistakes)
 Gorgon.get('key', fn, false);
 
 // Full policy object (specify provider)
@@ -146,7 +146,7 @@ Gorgon.addProvider('perm', fileCache);
 
 const movie = await Gorgon.get(`movie/${id}`, async () => {
   return fetch(`https://api.themoviedb.org/3/movie/${id}`).then(r => r.json());
-}, { provider: 'perm', expiry: false }); // cache forever to disk
+}, { provider: 'perm', expiry: false });
 ```
 
 ### Error handling
@@ -164,7 +164,74 @@ try {
 }
 ```
 
-For more details on the React integration, custom providers, hooks, ClearLink plugin, and the file provider, read the reference files in the `references/` directory alongside this skill.
+## Common Mistakes
+
+### CRITICAL: Not clearing cache after mutating underlying data
+
+```typescript
+// Wrong — forgets to clear after mutation
+const user = await Gorgon.get(`user/${id}`, () => fetchUser(id), 60000);
+await updateUser(id, newData);
+
+// Correct — clear the cache key after mutation
+const user = await Gorgon.get(`user/${id}`, () => fetchUser(id), 60000);
+await updateUser(id, newData);
+Gorgon.clear(`user/${id}`);
+```
+
+Gorgon does not know when the underlying data changes. Always clear the relevant cache key after any mutation that affects cached data.
+
+### CRITICAL: Cache keys not specific enough to input parameters
+
+```typescript
+// Wrong — same key regardless of varying inputs
+const results = await Gorgon.get('search-results', () =>
+  searchAPI(query, page, filters), 60000);
+
+// Correct — serialize all input params into the key
+const results = await Gorgon.get(
+  `search/${query}/${page}/${JSON.stringify(filters)}`,
+  () => searchAPI(query, page, filters), 60000);
+```
+
+If the cache key does not include all varying parameters, different requests share the same cached result, returning wrong data silently.
+
+### HIGH: Caching forever without expiry in production
+
+```typescript
+// Wrong — data becomes permanently stale
+await Gorgon.get('config', fetchConfig, false);
+
+// Correct — always set an expiry, even if long
+await Gorgon.get('config', fetchConfig, 24 * 60 * 60 * 1000); // 1 day
+```
+
+Even rarely-changing data should have an expiry. Permanent caches become stale silently and are hard to debug.
+
+### MEDIUM: Aligned cache expiry causing thundering herd
+
+```typescript
+// Wrong — all items expire simultaneously
+for (const id of popularIds) {
+  await Gorgon.get(`item/${id}`, () => fetchItem(id), 3600000);
+}
+
+// Correct — fuzz expiry to spread out cache refreshes
+for (const id of popularIds) {
+  const fuzz = Math.random() * 600000; // up to 10 min variance
+  await Gorgon.get(`item/${id}`, () => fetchItem(id), 3600000 + fuzz);
+}
+```
+
+When warming caches for many popular items, fuzz the expiry times so they don't all expire at once causing a burst of requests.
+
+### HIGH: Using a plain Map instead of Gorgon
+
+A hand-rolled `Map`-based cache misses concurrency deduplication (10 simultaneous calls hit the API 10 times), has no expiry management, no wildcard clearing, and no type safety on cached returns. Use `Gorgon.get` instead.
+
+### MEDIUM: Wrapping Gorgon.get in custom deduplication
+
+Gorgon already deduplicates concurrent requests for the same key. Adding external dedup logic is redundant and can introduce bugs.
 
 ## Reference Files
 

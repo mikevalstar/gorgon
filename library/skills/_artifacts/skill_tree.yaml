@@ -1,0 +1,54 @@
+# skills/_artifacts/skill_tree.yaml
+library:
+  name: '@gorgonjs/gorgon'
+  version: '1.6.0'
+  repository: 'https://github.com/mikevalstar/gorgon'
+  description: 'A lightweight TypeScript caching library for async functions with automatic concurrency protection'
+generated_from:
+  domain_map: 'skills/_artifacts/domain_map.yaml'
+  skill_spec: 'skills/_artifacts/skill_spec.md'
+generated_at: '2026-03-22'
+
+skills:
+  - name: 'gorgon-core'
+    slug: 'core'
+    type: 'core'
+    domain: 'caching'
+    path: 'skills/core/SKILL.md'
+    description: >
+      Core caching with @gorgonjs/gorgon: Gorgon.get, Gorgon.put, Gorgon.clear
+      (with wildcards), Gorgon.overwrite, expiry policies, cache key naming,
+      concurrency deduplication, hooks, custom storage providers,
+      @gorgonjs/file-provider for disk persistence, and @gorgonjs/clearlink
+      for distributed cache invalidation via WebSocket.
+    requires: []
+    sources:
+      - 'mikevalstar/gorgon:library/index.ts'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/get.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/put.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/clear.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/overwrite.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/policies.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/settings.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/usage/addprovider.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/hooks.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/concurrency.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/error-handling.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/custom-storage.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/providers/file.md'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/plugins/clearlink.md'
+
+  - name: 'react-gorgon'
+    slug: 'react'
+    type: 'framework'
+    domain: 'react'
+    path: 'skills/react/SKILL.md'
+    description: >
+      React integration for @gorgonjs/gorgon via @gorgonjs/react: useGorgon
+      hook with data/error/loading/refetch, clearGorgon helper, cache key
+      management in components, and DIY hook patterns.
+    requires:
+      - 'core'
+    sources:
+      - 'mikevalstar/gorgon:clients/react/index.ts'
+      - 'mikevalstar/gorgon:gorgonjs.dev/src/pages/docs/ui/react.md'

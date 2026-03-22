@@ -106,3 +106,44 @@ function MyComponent() {
   return <div>{data ? JSON.stringify(data) : 'Loading...'}</div>;
 }
 ```
+
+## Common Mistakes
+
+### CRITICAL: Not including all dynamic params in the cache key
+
+```typescript
+// Wrong — changing userId won't refetch
+const { data } = useGorgon('user-profile', () => fetchUser(userId), 60000);
+
+// Correct — key changes when userId changes, triggering refetch
+const { data } = useGorgon(`user/${userId}`, () => fetchUser(userId), 60000);
+```
+
+### HIGH: Using Gorgon.clear instead of refetch
+
+```typescript
+// Wrong — cache clears but component doesn't re-render
+Gorgon.clear('user/1');
+
+// Correct — clears cache AND triggers re-render
+refetch();
+```
+
+Use `refetch()` from useGorgon to clear and re-fetch in one step. `Gorgon.clear()` alone does not trigger a React re-render.
+
+### HIGH: Missing cleanup in DIY hooks
+
+```typescript
+// Wrong — can set state after unmount
+useEffect(() => {
+  Gorgon.get(key, asyncFunc, policy).then(setData);
+}, [key]);
+
+// Correct — guard against unmounted state updates
+useEffect(() => {
+  let mounted = true;
+  Gorgon.get(key, asyncFunc, policy)
+    .then(result => { if (mounted) setData(result); });
+  return () => { mounted = false; };
+}, [key]);
+```
