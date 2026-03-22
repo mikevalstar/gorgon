@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-03-22
+
+### Fixed
+
+- Added nested types exports for newer versions of TypeScript (moduleResolution: bundler/node16/nodenext)
+
+## [1.5.1] - 2024-01-15
+
+### Fixed
+
+- Updated the gorgon website for 1.5.1
+
 ## [1.5.0] - 2023-09-11
 
 ### Added
