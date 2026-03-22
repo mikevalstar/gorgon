@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-03-22
+
+### Added
+
+- TanStack Intent agent skills (core + react) shipped with npm package
+- llms.txt and llms-full.txt on the website for AI agent discoverability
+- LLM Reference card on the homepage
+
 ## [1.6.0] - 2026-03-22
 
 ### Fixed
