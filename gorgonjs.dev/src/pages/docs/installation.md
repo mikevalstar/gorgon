@@ -22,3 +22,13 @@ yarn add @gorgonjs/gorgon
 ```bash
 pnpm add @gorgonjs/gorgon
 ```
+
+## AI Coding Agents
+
+If you use an AI coding agent like Claude Code, add the Gorgon skill for better assistance:
+
+```bash
+npx skills add mikevalstar/gorgon
+```
+
+A machine-readable API reference is also available at [llms-full.txt](/llms-full.txt).
