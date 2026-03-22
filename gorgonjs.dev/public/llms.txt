@@ -1,0 +1,56 @@
+# Gorgon.js
+
+> A lightweight (~4kb) TypeScript caching library for async functions. Works in Node.js and browsers with automatic concurrency protection.
+
+Gorgon deduplicates simultaneous requests for the same cache key — if 10 callers request the same key at once, the async function runs only once and all callers share the result. Errors are never cached; the next request retries fresh.
+
+## Installation
+
+- npm: `npm install @gorgonjs/gorgon`
+- pnpm: `pnpm add @gorgonjs/gorgon`
+- yarn: `yarn add @gorgonjs/gorgon`
+
+## Full Documentation
+
+For a complete, self-contained reference with all API details, code examples, TypeScript types, and integration guides, see [llms-full.txt](https://gorgonjs.dev/llms-full.txt).
+
+## Docs
+
+- [Getting Started](https://gorgonjs.dev/docs/getting-started): Quick start guide
+- [Simplified Overview](https://gorgonjs.dev/docs/simplified): One-page overview of the library
+
+### Core API
+
+- [get](https://gorgonjs.dev/docs/usage/get): `Gorgon.get(key, asyncFunc, policy?)` — fetch from cache or execute and cache
+- [put](https://gorgonjs.dev/docs/usage/put): `Gorgon.put(key, value, policy?)` — insert directly into cache
+- [clear](https://gorgonjs.dev/docs/usage/clear): `Gorgon.clear(key)` — clear a key, supports wildcards (`user/*`)
+- [overwrite](https://gorgonjs.dev/docs/usage/overwrite): `Gorgon.overwrite(key, asyncFunc, policy?)` — force-refresh a key
+- [settings](https://gorgonjs.dev/docs/usage/settings): `Gorgon.settings(opts?)` — configure debug, defaultProvider, retry timeout
+- [addProvider](https://gorgonjs.dev/docs/usage/addprovider): `Gorgon.addProvider(name, provider)` — register a storage backend
+- [Policies](https://gorgonjs.dev/docs/usage/policies): Expiry as milliseconds, Date, false (forever), or {expiry, provider}
+
+### Concepts
+
+- [Concurrency](https://gorgonjs.dev/docs/concurrency): Automatic request deduplication with configurable retry threshold
+- [Error Handling](https://gorgonjs.dev/docs/error-handling): Errors propagate to all waiters but are never cached
+- [Retry](https://gorgonjs.dev/docs/retry): Configurable timeout for stuck requests (default: 5s)
+- [Query Collocation](https://gorgonjs.dev/docs/collocation): Pattern for keeping fetch logic close to components
+- [Hooks](https://gorgonjs.dev/docs/hooks): Listen to cache lifecycle events (get, put, clear, etc.)
+- [Custom Storage](https://gorgonjs.dev/docs/custom-storage): Implement IGorgonCacheProvider for Redis, IndexedDB, etc.
+
+### Integrations
+
+- [React](https://gorgonjs.dev/docs/ui/react): useGorgon hook with loading/error/refetch
+- [File Provider](https://gorgonjs.dev/docs/providers/file): `@gorgonjs/file-provider` — persist cache to disk
+- [ClearLink](https://gorgonjs.dev/docs/plugins/clearlink): `@gorgonjs/clearlink` — sync cache clearing across servers via WebSocket
+
+## Optional Packages
+
+- `@gorgonjs/react` — React hooks for Gorgon
+- `@gorgonjs/file-provider` — File-based cache provider for server-side persistence
+- `@gorgonjs/clearlink` — WebSocket-based cross-instance cache invalidation
+
+## Source
+
+- [GitHub](https://github.com/mikevalstar/gorgon)
+- [npm](https://www.npmjs.com/package/@gorgonjs/gorgon)

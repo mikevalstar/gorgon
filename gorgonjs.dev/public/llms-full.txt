@@ -1,0 +1,421 @@
+# Gorgon.js
+
+> A lightweight (~4kb, ~1.3kb gzipped) TypeScript caching library for async functions. Works in Node.js and browsers with automatic concurrency protection.
+
+Gorgon deduplicates simultaneous requests for the same cache key — if 10 callers request the same key at once, the async function runs only once and all callers share the result. Errors are never cached; the next request retries fresh.
+
+## Installation
+
+```bash
+npm install @gorgonjs/gorgon
+# or: pnpm add @gorgonjs/gorgon / yarn add @gorgonjs/gorgon
+```
+
+## Core Concepts
+
+- **Cache key naming**: Use the format `cachetype/{id}/{sub-id}` — this enables wildcard clearing (e.g. `Gorgon.clear('user/*')`)
+- **Concurrency protection**: If 10 requests hit `Gorgon.get('key', fn)` simultaneously, `fn` only executes once. The other 9 wait and share the result. The default retry threshold for stuck requests is 5 seconds, configurable via `Gorgon.settings({ retry: 5000 })`.
+- **Errors are never cached**: If the async function throws, all waiting callers get the error, but the next request retries fresh.
+- **Expiry options**: milliseconds (`60000`), a `Date` object, `false` (cache forever), or omit for no expiry.
+
+## API Reference
+
+### Gorgon.get(key, asyncFunc, policy?): Promise<R>
+
+The primary method — fetches from cache or executes the function and caches the result. This is the method you will use most often.
+
+```typescript
+import Gorgon from '@gorgonjs/gorgon';
+
+const user = await Gorgon.get(`user/${id}`, async () => {
+  const res = await fetch(`/api/users/${id}`);
+  return res.json();
+}, 60 * 1000); // cache for 1 minute
+```
+
+Parameters:
+- `key` (string): Cache key. Recommended format: `cachetype/{id}/{sub-id}`
+- `asyncFunc` (() => R): Async function that returns the value to cache
+- `policy?` (GorgonPolicyInput): Expiry — milliseconds, Date, false, or policy object
+
+### Gorgon.put(key, value, policy?): Promise<R>
+
+Directly insert a value into cache without executing a function.
+
+```typescript
+await Gorgon.put(`user/${id}`, userData, 60 * 1000);
+```
+
+Parameters:
+- `key` (string): Cache key
+- `value` (R): The value to store
+- `policy?` (GorgonPolicyInput): Expiry policy
+
+### Gorgon.clear(key, provider?): Promise<boolean | boolean[]>
+
+Clear a cache key. Supports wildcard patterns with `*`. Returns an array when wildcards are used.
+
+```typescript
+Gorgon.clear(`user/${id}`);     // single key
+Gorgon.clear(`user/*`);         // all keys starting with user/
+```
+
+### Gorgon.clearAll(provider?): Promise<boolean>
+
+Clear all cached data for the given provider (or the default provider).
+
+### Gorgon.overwrite(key, asyncFunc, policy?): Promise<R>
+
+Force-refresh a cache key by always executing the function. Unlike `get`, this does NOT have concurrency protection — every call executes the function.
+
+```typescript
+const updated = await Gorgon.overwrite(`user/${id}`, async () => {
+  return fetch(`/api/users/${id}`).then(r => r.json());
+}, 60 * 1000);
+```
+
+### Gorgon.settings(newSettings?): GorgonSettings
+
+Configure global defaults. Returns the current settings.
+
+```typescript
+Gorgon.settings({
+  debug: true,               // log cache hits/misses to console
+  defaultProvider: 'memory', // which storage provider to use
+  retry: 5000                // ms before a "stuck" request is retried (default: 5000)
+});
+```
+
+### Gorgon.addProvider(name, provider): void
+
+Register a custom storage backend. See the Custom Storage Providers section below.
+
+```typescript
+import Gorgon from '@gorgonjs/gorgon';
+import { FileProvider } from '@gorgonjs/file-provider';
+
+const fileCache = FileProvider('./cache', { createSubfolder: false });
+Gorgon.addProvider('file', fileCache);
+Gorgon.settings({ defaultProvider: 'file' });
+```
+
+### Gorgon.addHook(event, callback): void
+
+Listen to cache lifecycle events. Multiple hooks can be added per event and they execute in order.
+
+Available events: `settings`, `addProvider`, `put`, `clear`, `clearAll`, `overwrite`, `get`, `valueError`
+
+```typescript
+Gorgon.addHook('clear', (key, input, output) => {
+  console.log('Cache cleared:', input);
+});
+
+Gorgon.addHook('valueError', (key, input, output) => {
+  console.error('Cache function error:', output);
+});
+```
+
+## Policies
+
+Policies control cache expiry and which provider to use.
+
+```typescript
+// Milliseconds from now
+Gorgon.get('key', fn, 60000);
+
+// Specific date
+Gorgon.get('key', fn, new Date('2026-12-31'));
+
+// Cache forever (never expires)
+Gorgon.get('key', fn, false);
+
+// No policy — cached until manually cleared
+Gorgon.get('key', fn);
+
+// Full policy object — specify provider and expiry
+Gorgon.get('key', fn, { expiry: 60000, provider: 'file' });
+```
+
+TypeScript types:
+
+```typescript
+type GorgonPolicyInput = GorgonPolicy | number | Date;
+type GorgonPolicy = {
+  expiry: number | Date | false;
+  provider: string;
+};
+```
+
+## Error Handling
+
+Errors thrown by the async function are NOT cached. All concurrent waiters receive the error, but the next request will retry fresh.
+
+```typescript
+try {
+  const data = await Gorgon.get('flaky-api', async () => {
+    const res = await fetch('/api/flaky');
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
+  }, 30000);
+} catch (e) {
+  // Next call to Gorgon.get('flaky-api', ...) will retry
+  console.error(e);
+}
+```
+
+## Common Patterns
+
+### Query collocation — keep fetch logic next to where it's used
+
+```typescript
+// queries/todos.ts
+import Gorgon from '@gorgonjs/gorgon';
+
+export const getTodo = (id: number) =>
+  Gorgon.get(`todo/${id}`, async () => {
+    const res = await fetch(`https://api.example.com/todos/${id}`);
+    return res.json();
+  }, 60 * 1000);
+```
+
+### Cache with file persistence (server-side)
+
+```typescript
+import Gorgon from '@gorgonjs/gorgon';
+import { FileProvider } from '@gorgonjs/file-provider';
+
+const fileCache = FileProvider('./cache', { createSubfolder: false });
+Gorgon.addProvider('perm', fileCache);
+
+const movie = await Gorgon.get(`movie/${id}`, async () => {
+  return fetch(`https://api.themoviedb.org/3/movie/${id}`).then(r => r.json());
+}, { provider: 'perm', expiry: false }); // cache forever to disk
+```
+
+### Wildcard cache invalidation
+
+```typescript
+// Cache multiple related items
+await Gorgon.get(`user/${id}/profile`, fetchProfile);
+await Gorgon.get(`user/${id}/posts`, fetchPosts);
+await Gorgon.get(`user/${id}/settings`, fetchSettings);
+
+// Clear everything for a user at once
+Gorgon.clear(`user/${id}/*`);
+```
+
+## Custom Storage Providers
+
+Implement `IGorgonCacheProvider` to create your own backend (e.g. Redis, IndexedDB, localStorage):
+
+```typescript
+interface IGorgonCacheProvider {
+  init: () => Promise<void>;
+  get: (key: string) => Promise<any>;
+  set: <R>(key: string, value: R, policy: GorgonPolicySanitized) => Promise<R>;
+  clear: (key?: string) => Promise<boolean>;
+  keys: () => Promise<string[]>;
+}
+
+type GorgonPolicySanitized = {
+  expiry: number | false; // milliseconds from now, or false for forever
+  provider: string;
+};
+```
+
+Register your provider:
+
+```typescript
+import Gorgon from '@gorgonjs/gorgon';
+
+Gorgon.addProvider('my-provider', myProvider);
+
+// Use for specific keys via policy:
+Gorgon.get('key', fn, { expiry: 60000, provider: 'my-provider' });
+
+// Or set as the default:
+Gorgon.settings({ defaultProvider: 'my-provider' });
+```
+
+## React Integration
+
+### Official package: @gorgonjs/react
+
+```bash
+npm install @gorgonjs/react @gorgonjs/gorgon
+```
+
+### useGorgon Hook
+
+Provides `data`, `error`, `loading`, and `refetch`:
+
+```typescript
+import { useGorgon, clearGorgon } from '@gorgonjs/react';
+
+function UserProfile({ userId }: { userId: string }) {
+  const { data, error, loading, refetch } = useGorgon(
+    `user/${userId}`,
+    () => fetch(`/api/users/${userId}`).then(r => r.json()),
+    60 * 1000,
+    { debug: false }
+  );
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return (
+    <div>
+      <h1>{data.name}</h1>
+      <button onClick={() => refetch()}>Refresh</button>
+      <button onClick={() => refetch({ clearKey: 'user/*' })}>
+        Clear all users & refresh
+      </button>
+    </div>
+  );
+}
+```
+
+Hook signature:
+
+```typescript
+const { data, error, loading, refetch } = useGorgon<R>(
+  key: string,
+  asyncFunc: () => Promise<R>,
+  policy?: GorgonPolicyInput,
+  options?: { debug?: boolean }
+)
+```
+
+Returns:
+- `data: R | null` — resolved data (null while loading)
+- `error: Error | null` — error if the async function threw
+- `loading: boolean` — true while fetching
+- `refetch(opts?: { clearKey?: string }): void` — clears cache and re-fetches
+
+### clearGorgon helper
+
+```typescript
+import { clearGorgon } from '@gorgonjs/react';
+
+clearGorgon('user/*');  // clear specific keys
+clearGorgon();          // clear all
+```
+
+### Simple DIY hook
+
+If you don't need the full package:
+
+```typescript
+import { useState, useEffect } from 'react';
+import Gorgon, { GorgonPolicyInput } from '@gorgonjs/gorgon';
+
+function useGorgon<R>(key: string, asyncFunc: () => Promise<R>, policy?: GorgonPolicyInput): R | null {
+  const [data, setData] = useState<R | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    Gorgon.get(key, asyncFunc, policy)
+      .then(result => { if (mounted) setData(result); })
+      .catch(err => console.error('Gorgon error', err));
+    return () => { mounted = false; };
+  }, [key]);
+
+  return data;
+}
+```
+
+## File Provider (@gorgonjs/file-provider)
+
+Persists cache to disk as JSON files. Server-side only.
+
+```bash
+npm install @gorgonjs/file-provider @gorgonjs/gorgon
+```
+
+```typescript
+import Gorgon from '@gorgonjs/gorgon';
+import { FileProvider } from '@gorgonjs/file-provider';
+
+const fileCache = FileProvider('./cache', {
+  createSubfolder: true,  // creates a dated subfolder (default: true)
+  clearFolder: false       // clear the cache dir on init (default: false)
+});
+
+Gorgon.addProvider('file', fileCache);
+
+const movie = await Gorgon.get(`movie/${id}`, async () => {
+  return fetch(`https://api.example.com/movie/${id}`).then(r => r.json());
+}, { provider: 'file', expiry: false });
+```
+
+Caveats:
+- Uses `JSON.stringify` — only works with serializable data. For `Date`, `Set`, `Map`, use the `superjson` library.
+- Cache expiry timers are lost on process restart. Use `createSubfolder: false` for persistent caching.
+- Keys are sanitized to valid filenames (non-alphanumeric chars except `-` and `/` become `_`).
+
+## ClearLink Plugin (@gorgonjs/clearlink)
+
+Synchronizes cache clearing across multiple server instances via WebSocket.
+
+```bash
+npm install @gorgonjs/clearlink
+```
+
+Server:
+
+```typescript
+import { server } from '@gorgonjs/clearlink';
+server.init({ port: 8686 });
+```
+
+Client (on each app instance):
+
+```typescript
+import Gorgon from '@gorgonjs/gorgon';
+import { client } from '@gorgonjs/clearlink';
+
+client.connect('ws://127.0.0.1:8686');
+client.apply(Gorgon, true); // second arg enables debug logging
+
+// Now Gorgon.clear() on any instance broadcasts to all others
+Gorgon.clear('user/123');
+```
+
+How it works:
+- Hooks into Gorgon's `clear` and `clearAll` events
+- Broadcasts clear messages to all connected WebSocket clients
+- Prevents echo loops — the originating instance doesn't re-clear
+- Auto-reconnects after 10 seconds on disconnect
+
+Limitations:
+- Only `clear` and `clearAll` are synced (not `put` or auto-expiry)
+- No message queuing when the server is offline
+
+## TypeScript Types
+
+All types are exported from `@gorgonjs/gorgon`:
+
+```typescript
+import Gorgon, {
+  GorgonPolicyInput,
+  GorgonPolicy,
+  GorgonPolicySanitized,
+  GorgonSettings,
+  GorgonSettingsInput,
+  GorgonHookKey,
+  GorgonHook,
+  IGorgonCacheProvider,
+} from '@gorgonjs/gorgon';
+```
+
+## Optional Packages
+
+- `@gorgonjs/react` — React hooks for Gorgon
+- `@gorgonjs/file-provider` — File-based cache provider for server-side persistence
+- `@gorgonjs/clearlink` — WebSocket-based cross-instance cache invalidation
+
+## Source
+
+- [GitHub](https://github.com/mikevalstar/gorgon)
+- [npm](https://www.npmjs.com/package/@gorgonjs/gorgon)
+- [Website](https://gorgonjs.dev)
