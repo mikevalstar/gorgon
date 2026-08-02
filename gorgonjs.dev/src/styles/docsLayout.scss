@@ -1,4 +1,4 @@
-@import "docsNav";
+@use "docsNav";
 
 $navheight: 5em;
 
@@ -53,7 +53,7 @@ $navheight: 5em;
 
 // on small screens we eliminate the right hand column
 // and move the main article to the right
-@media (max-width: 1400px) {
+@media (width <= 1400px) {
   #docs-main-article {
     margin-left: 22em;
   }
@@ -66,7 +66,7 @@ $navheight: 5em;
 // on mobile the nav and right slot will be hidden
 // and the main article will take up the whole screen
 // show and hide the nav with the button in the header
-@media (max-width: 1010px) {
+@media (width <= 1010px) {
   #docs-nav-overlay {
     display: block;
     float: right;
@@ -132,7 +132,7 @@ $navheight: 5em;
   }
 }
 
-@media (max-width: 1010px) {
+@media (width <= 1010px) {
   #search {
     display: none;
   }

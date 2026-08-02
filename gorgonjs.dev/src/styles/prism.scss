@@ -14,7 +14,7 @@ pre[class*="language-"] {
   font-size: 1.05em;
   line-height: 1.3em;
   text-align: left;
-  word-wrap: normal;
+  overflow-wrap: normal;
   word-break: normal;
   white-space: pre;
   word-spacing: normal;
@@ -22,7 +22,7 @@ pre[class*="language-"] {
   tab-size: 4;
 
   // on mobile smaller fonts
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     font-size: 0.95em;
   }
 }
@@ -47,7 +47,7 @@ pre[class*="language-"] {
   overflow: auto;
 
   // on mobile less padding
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     padding: 0.5em 0.25em;
   }
 }
