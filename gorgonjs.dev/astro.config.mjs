@@ -1,26 +1,17 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import compress from 'vite-plugin-compression';
+import compressor from 'astro-compressor';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://gorgonjs.dev',
-  integrations: [sitemap()],
+  // compressor must stay last so it sees every generated file
+  integrations: [sitemap(), compressor()],
   markdown: {
     syntaxHighlight: 'prism',
   },
   vite: {
-    plugins: [compress({
-      ext: '.br',
-      algorithm: 'brotliCompress'
-    }), compress({
-      ext: '.gz',
-      algorithm: 'gzip'
-    })],
-    build: {
-      // emptyOutDir: false, // Implement later as an option
-    },
-    ssr:{
+    ssr: {
       external: ["prismjs"]
     }
   }

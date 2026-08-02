@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  library:
+    name: Build & test packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # no root package.json, so action-setup can't infer from packageManager
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # providers/file tests import the built library, so build before testing
+      - run: pnpm -r --filter '!@gorgonjs/gorgonjs.dev' build
+
+      - run: pnpm -r --filter '!@gorgonjs/gorgonjs.dev' test
+
+  website:
+    name: Build & lint website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # no root package.json, so action-setup can't infer from packageManager
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @gorgonjs/gorgonjs.dev lint
+
+      - run: pnpm --filter @gorgonjs/gorgonjs.dev lint:css
+
+      - run: pnpm --filter @gorgonjs/gorgonjs.dev build

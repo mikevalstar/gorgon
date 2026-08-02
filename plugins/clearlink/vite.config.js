@@ -1,7 +1,8 @@
 // vite.config.ts
 const path = require('path');
 const { defineConfig } = require('vite');
-const dts = require('vite-plugin-dts');
+// vite-plugin-dts >=3.7 dropped its CJS default export
+const dts = require('vite-plugin-dts').default;
 
 module.exports = defineConfig({
   plugins: [dts({ insertTypesEntry: true })],

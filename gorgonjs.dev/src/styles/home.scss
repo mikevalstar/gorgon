@@ -22,7 +22,7 @@
 }
 
 // on mobile we want to stack the columns
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .two-columns {
     grid-template-columns: 1fr;
   }

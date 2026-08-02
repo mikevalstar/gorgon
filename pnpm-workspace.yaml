@@ -5,3 +5,10 @@ packages:
   - 'library'
   - 'providers/*'
   - 'plugins/*'
+# pnpm 10+ defaults this to false, which would resolve the sibling packages'
+# `@gorgonjs/gorgon` dep to the published npm version instead of ../../library
+linkWorkspacePackages: true
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true

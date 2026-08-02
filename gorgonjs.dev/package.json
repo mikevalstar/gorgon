@@ -6,30 +6,33 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build; npx -y pagefind --source dist",
-    "build:preview": "astro build; npx -y pagefind --source dist --serve",
+    "build": "astro build && pagefind --site dist",
+    "build:preview": "astro build && pagefind --site dist --serve",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint .",
+    "lint:css": "stylelint \"src/**/*.{css,scss,astro}\""
   },
   "dependencies": {
-    "@astrojs/prism": "3.0.0",
-    "astro": "^3.0.7",
-    "prismjs": "^1.29.0"
+    "astro": "^7.1.6",
+    "prismjs": "^1.30.0"
   },
   "devDependencies": {
-    "@astrojs/sitemap": "^3.0.0",
-    "@typescript-eslint/parser": "^5.42.1",
-    "eslint": "^8.27.0",
-    "eslint-plugin-astro": "^0.21.0",
-    "postcss": "^8.4.19",
-    "sass": "^1.56.1",
-    "sharp": "^0.31.2",
-    "stylelint": "^14.14.1",
-    "stylelint-config-property-sort-order-smacss": "^9.0.0",
-    "stylelint-config-standard": "^29.0.0",
-    "stylelint-config-standard-scss": "^6.1.0",
-    "typescript": "^4.8.4",
-    "vite": "^3.2.3",
-    "vite-plugin-compression": "^0.5.1"
+    "@astrojs/sitemap": "^3.7.3",
+    "@typescript-eslint/parser": "^8.65.0",
+    "astro-compressor": "^1.3.0",
+    "eslint": "^10.8.0",
+    "eslint-plugin-astro": "^3.0.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "pagefind": "^1.5.2",
+    "postcss": "^8.5.25",
+    "postcss-html": "^2.0.0",
+    "sass": "^1.102.0",
+    "sharp": "^0.35.3",
+    "stylelint": "^17.14.1",
+    "stylelint-config-property-sort-order-smacss": "^11.2.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "typescript": "^6.0.3"
   }
 }
